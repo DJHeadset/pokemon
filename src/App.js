@@ -13,10 +13,6 @@ function App() {
     );
   };
 
-  const handleSelectCity = (city) => {
-    console.log(city)
-  }
-
   useEffect(() => {
     fetchCityData().then((cities) => {
       setLoading(false);
@@ -28,7 +24,7 @@ function App() {
     return <Loading />;
   }
 
-  return <Locations cityList={cityList} selectCity={handleSelectCity} />;
+  return <Locations cityList={cityList} />;
 }
 
 export default App;
