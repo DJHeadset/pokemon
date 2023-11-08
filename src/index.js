@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import './index.css';
 import App from './App';
 import EnemyPokemon from './Components/EnemyPokemon';
+import Battle from './Components/Battle';
 
 const router = createBrowserRouter([
   {
@@ -16,6 +17,10 @@ const router = createBrowserRouter([
       {
         path: "/enemy/:num",
         element: <EnemyPokemon />
+      },
+      {
+        path: "/battle/:own/:enemy",
+        element: <Battle />
       }
     ]
   }

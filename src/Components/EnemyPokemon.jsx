@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import ownPokemons from "../resources/pokemons.json";
 import battle from "../resources/pic/Battle.png";
 import Loading from "./Loading/Loading";
@@ -28,11 +28,6 @@ function EnemyPokemon() {
   const [enemyPokemon, setEnemyPokemon] = useState();
   const [loading, setLoading] = useState(true);
 
-  const handleSelect = event => {
-    console.log(event.target.id)
-    //selectOwn(event.target.id)
-  };
-
   function getOwnPokemon() {
     const ownPokeNames = ownPokemons.pokemons.map((e) => {
       return e;
@@ -46,7 +41,7 @@ function EnemyPokemon() {
       setEnemyPokemon(randomPokemon);
       setLoading(false);
     });
-  }, []);
+  }, [num]);
 
   if (loading) {
     return <Loading />;
@@ -57,10 +52,7 @@ function EnemyPokemon() {
       <div className="card" style={{ backgroundImage: `url(${battle})` }}>
         <div className="enemy-pokemon cards">
           <div className="Poke-Name">{enemyPokemon.name}</div>
-          <img
-            alt="Poke-Icon"
-            src={enemyPokemon.sprites.front_default.slice(57)}
-          />
+          <img alt="Poke-Icon" src={enemyPokemon.sprites.front_default} />
           <div className="Poke-Stats">
             {enemyPokemon.stats.slice(0, 3).map((e, i) => (
               <p key={i}>
@@ -85,10 +77,12 @@ function EnemyPokemon() {
             {" "}
             Choose your pokemon:
             {ownPokemon.map((own) => (
-              <p key={own.name} id={own.id} className="options" onClick={handleSelect}>
-                <img alt="Poke-Icon" src={own.sprites.front_default} />
-                {own.name}
-              </p>
+              <Link to={`/battle/${own.id}/${enemyPokemon.id}`}>
+                <p key={own.name} id={own.id} className="options">
+                  <img alt="Poke-Icon" src={own.sprites.front_default} />
+                  {own.name}
+                </p>
+              </Link>
             ))}
           </label>
         </div>
