@@ -22,4 +22,4 @@ jobs:
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag $DOCKER_IMAGE
     -name: publish docker image
-      run:  docker push $DOCKER_IMAGE
+      run: docker push $DOCKER_IMAGE
