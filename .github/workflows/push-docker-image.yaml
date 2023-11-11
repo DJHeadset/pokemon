@@ -7,7 +7,7 @@ on:
     branches: [ "main" ]
 
 env:
-  DOCKER_IMAGE: 'djheadset/pokemon:$(date +%s)'
+  DOCKER_IMAGE: 'djheadset/pokemon:latest'
 
 jobs:
 
