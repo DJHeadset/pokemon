@@ -6,8 +6,6 @@ on:
 
 env:
   DOCKER_IMAGE: 'djheadset/pokemon:latest'
-  DOCKER_USER: ${{ secrets.DOCKER_USER }}
-  DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
 jobs:
   docker:
@@ -26,8 +24,8 @@ jobs:
         name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
-          username: $DOCKER_USER
-          password: $DOCKER_PASSWORD
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
       -
         name: Build and push
         uses: docker/build-push-action@v5
