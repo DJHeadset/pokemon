@@ -5,6 +5,8 @@ import './index.css';
 import App from './App';
 import EnemyPokemon from './Components/EnemyPokemon';
 import Battle from './Components/Battle';
+import Lost from './Components/Lost';
+import Won from './Components/Win';
 
 const router = createBrowserRouter([
   {
@@ -21,6 +23,14 @@ const router = createBrowserRouter([
       {
         path: "/battle/:own/:enemy",
         element: <Battle />
+      },
+      {
+        path: "/lost",
+        element: <Lost />
+      },
+      {
+        path: "/won",
+        element: <Won />
       }
     ]
   }

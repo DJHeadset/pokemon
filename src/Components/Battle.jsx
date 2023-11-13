@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import Loading from "./Loading/Loading";
 import ownPokemons from "../resources/pokemons.json";
 import battle from "../resources/pic/Battle.png";
@@ -15,6 +15,8 @@ function Battle() {
   const [turn, setTurn] = useState(0);
   const [enemyPokemonStats, setEnemyPokemonStats] = useState(null);
   const [ownPokemonStats, setOwnPokemonStats] = useState(null);
+
+  const navigate = useNavigate();
 
   async function getOwnPokemon(own) {
     ownPokemons.pokemons.forEach((pokemon) => {
@@ -59,9 +61,9 @@ function Battle() {
 
   function winnerPokemon() {
     if (enemyPokemonStats && enemyPokemonStats.hp <= 0) {
-      console.log("win");
+      navigate("/won");
     } else if (ownPokemonStats && ownPokemonStats.hp <= 0) {
-      console.log("loose");
+      navigate("/lost");
     }
   }
 
