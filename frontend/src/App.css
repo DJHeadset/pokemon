@@ -3,18 +3,6 @@ body {
   font-family: "Press Start 2P", cursive;
 }
 
-.location-title {
-  text-align: center;
-  font-size: 32px;
-  font-weight: bold;
-  margin-top: 50px;
-  color: #fff;
-  text-shadow: 1px 1px 2px #444;
-  background-color: #ffcc33;
-  border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
-}
 
 .location-name {
   display: flex;
@@ -309,4 +297,8 @@ h1 {
   border-radius: 10px;
   padding: 20px;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.grow {
+  flex: 1;
 }

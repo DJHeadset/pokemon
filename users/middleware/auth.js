@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken")
 const { jwtSecret } = process.env;
 
 exports.adminAuth = (req, res, next) => {
+  console.log(req.cookies)
     const token = req.cookies.jwt;
     if (token) {
       jwt.verify(token, jwtSecret, (err, decodedToken) => {

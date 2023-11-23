@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Loading from "./Loading/Loading";
 import ownPokemons from "../resources/pokemons.json";
 import battle from "../resources/pic/Battle.png";

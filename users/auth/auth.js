@@ -1,4 +1,5 @@
 require("dotenv").config();
+const jwt = require('jsonwebtoken')
 const User = require("../model/user");
 const bcrypt = require("bcryptjs");
 const { jwtSecret } = process.env;
@@ -67,13 +68,12 @@ exports.login = async (req, res, next) => {
               expiresIn: maxAge, // 3hrs in sec
             }
           );
-          res.cookie("jwt", token, {
-            httpOnly: true,
+          res.cookie("user", token, {
             maxAge: maxAge * 1000, // 3hrs in ms
           });
           res.status(201).json({
             message: "User successfully Logged in",
-            user: user._id,
+            user: user.username,
           });
         } else {
           res.status(400).json({ message: "Login not succesful" });

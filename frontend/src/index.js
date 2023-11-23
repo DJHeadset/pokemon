@@ -7,14 +7,27 @@ import EnemyPokemon from './Components/EnemyPokemon';
 import Battle from './Components/Battle';
 import Lost from './Components/Lost';
 import Won from './Components/Win';
+import Header from './Components/Layout/Header';
+import Login from './Components/Login';
+import Register from './Components/Register';
+import Welcome from './Components/Welcome';
 
 const router = createBrowserRouter([
   {
     path: "/",
+    element: <Header />,
     children: [
       {
         path: "/",
-        element: <App />,
+        element: <Welcome />,
+      },
+      {
+        path: "/login",
+        element: <Login />,
+      },
+      {
+        path: "/register",
+        element: <Register />,
       },
       {
         path: "/enemy/:num",
