@@ -1,44 +1,90 @@
 require("dotenv").config();
-const jwt = require('jsonwebtoken')
+const jwt = require("jsonwebtoken");
 const User = require("../model/user");
 const bcrypt = require("bcryptjs");
 const { jwtSecret } = process.env;
 
-exports.register = async (req, res, next) => {
-  const { username, password } = req.body;
-  if (password.length < 6) {
-    return res.status(400).json({ message: "Password less than 6 characters" });
+async function sameUsername(name) {
+  try {
+    const users = await User.find({});
+    const usernames = users.map((user) => user.username);
+    return usernames.includes(name);
+  } catch (err) {
+    console.error(err);
+    return false;
   }
-  bcrypt.hash(password, 10).then(async (hash) => {
-    await User.create({
-      username,
-      password: hash,
-    })
-      .then((user) => {
-        const maxAge = 3 * 60 * 60;
-        const token = jwt.sign(
-          { id: user._id, username, role: user.role },
-          jwtSecret,
-          {
-            expiresIn: maxAge, // 3hrs in sec
-          }
-        );
-        res.cookie("jwt", token, {
-          httpOnly: true,
-          maxAge: maxAge * 1000, // 3hrs in ms
-        });
-        res.status(201).json({
-          message: "User successfully created",
-          user: user._id,
-        });
+}
+
+function isOlderThan13(dob) {
+  const dateOfBirth = new Date(dob);
+  const currentDate = new Date();
+  const ageInMilliseconds = currentDate - dateOfBirth;
+  const ageInYears = ageInMilliseconds / (1000 * 60 * 60 * 24 * 365.25);
+
+  return ageInYears > 13;
+}
+
+async function checkRegistration(data) {
+  let checked = "";
+
+  if (data.password.length < 6) {
+    checked += "Password less than 6 characters \n";
+  }
+
+  if (!isOlderThan13(data.userDob)) {
+    checked += "User must be at least 13 years old to register. \n";
+  }
+
+  try {
+    const isUserNameTaken = await sameUsername(data.username);
+    if (isUserNameTaken) {
+      checked += `Username '${data.username}' is taken. \n`;
+    }
+  } catch (error) {
+    console.log(error);
+  }
+  return checked;
+}
+
+exports.register = async (req, res, next) => {
+  const data = ({ username, password, userDob, userEmail } = req.body);
+  let checked = await checkRegistration(data);
+  if (checked === "") {
+    bcrypt.hash(password, 10).then(async (hash) => {
+      await User.create({
+        username,
+        password: hash,
+        dob: userDob,
+        email: userEmail,
       })
-      .catch((error) =>
-        res.status(400).json({
-          message: "User not successful created",
-          error: error.message,
+        .then((user) => {
+          const maxAge = 3 * 60 * 60;
+          const token = jwt.sign(
+            { id: user._id, username, role: user.role },
+            jwtSecret,
+            {
+              expiresIn: maxAge, // 3hrs in sec
+            }
+          );
+          res.cookie("jwt", token, {
+            httpOnly: true,
+            maxAge: maxAge * 1000, // 3hrs in ms
+          });
+          res.status(201).json({
+            message: "User successfully created",
+            user: user._id,
+          });
         })
-      );
-  });
+        .catch((error) =>
+          res.status(400).json({
+            message: "User not successful created",
+            error: error.message,
+          })
+        );
+    });
+  } else {
+    return res.status(400).json({ message: checked });
+  }
 };
 
 exports.login = async (req, res, next) => {
@@ -136,4 +182,3 @@ exports.deleteUser = async (req, res, next) => {
         .json({ message: "An error occurred", error: error.message })
     );
 };
-
