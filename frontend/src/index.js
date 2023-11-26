@@ -11,6 +11,8 @@ import Header from './Components/Layout/Header';
 import Login from './Components/Login';
 import Register from './Components/Register';
 import Welcome from './Components/Welcome';
+import Admin from './Components/Admin';
+import User from './Components/User';
 
 const router = createBrowserRouter([
   {
@@ -28,6 +30,14 @@ const router = createBrowserRouter([
       {
         path: "/register",
         element: <Register />,
+      },
+      {
+        path: "/admin",
+        element: <Admin />,
+      },
+      {
+        path: "/user",
+        element: <User />,
       },
       {
         path: "/enemy/:num",

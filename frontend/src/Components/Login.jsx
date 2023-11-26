@@ -1,18 +1,19 @@
 import "../App.css";
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
+import { Link, useNavigate } from "react-router-dom";
+import decoder from "./Decoder";
 
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  function decoder() {
-    if (document.cookie) {
-      const decodedCookie = jwtDecode(
-        document.cookie.substring(6, document.cookie.length - 1)
-      );
-      console.log(decodedCookie);
+  const navigate = useNavigate();
+
+  function redirect(role) {
+    if (role === "Basic") {
+      navigate("/user");
+    } else if (role === "admin") {
+      navigate("/admin");
     }
   }
 
@@ -29,12 +30,14 @@ function Login() {
       },
       credentials: "same-origin",
       body: JSON.stringify(user),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        decoder();
-      });
+    }).then((res) => {
+      if (res.ok) {
+        const cookie = decoder();
+        redirect(cookie.role);
+      } else {
+        res.json().then((data) => window.alert(data.message));
+      }
+    });
   };
 
   return (
