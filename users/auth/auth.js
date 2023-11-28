@@ -66,7 +66,7 @@ exports.register = async (req, res, next) => {
               expiresIn: maxAge, // 3hrs in sec
             }
           );
-          res.cookie("jwt", token, {
+          res.cookie("user", token, {
             httpOnly: true,
             maxAge: maxAge * 1000, // 3hrs in ms
           });
@@ -135,18 +135,21 @@ exports.login = async (req, res, next) => {
 };
 
 exports.update = async (req, res, next) => {
-  const { role, _id } = req.body;
-  console.log(role);
-  console.log(_id);
-  if (role && _id) {
+  const { role, id } = req.body;
+  if (role && id) {
     if (role === "admin") {
-      await User.findById(_id)
+      await User.findById(id)
         .then((user) => {
-          console.log(user);
           if (user.role !== "admin") {
             user.role = role;
             try {
-              const result = user.save().then((res) => console.log(res));
+              const result = user
+                .save()
+                .then((result) =>
+                  res
+                    .status(201)
+                    .json({ message: "User successfully upgraded", result })
+                );
             } catch (err) {
               console.log(err);
             }
