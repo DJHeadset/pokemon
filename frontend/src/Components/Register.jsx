@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "../App.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Register() {
   const [username, setUsername] = useState("");
@@ -9,6 +9,8 @@ function Register() {
   const [userDob, setUserDob] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [checked, setChecked] = useState(false);
+
+  const navigate = useNavigate()
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -28,7 +30,7 @@ function Register() {
         body: JSON.stringify(user),
       })
       .then((res) => res.json())
-      .then((data) => window.alert(data.message))
+      .then((data) => navigate("/starterpack"))
     }
   };
 

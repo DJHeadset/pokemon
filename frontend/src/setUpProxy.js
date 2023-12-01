@@ -8,4 +8,11 @@ module.exports = function(app) {
       changeOrigin: true,
     })
   );
+  app.use(
+    '/pokemon',
+    createProxyMiddleware({
+      target: 'http://localhost:5001',
+      changeOrigin: true,
+    })
+  );
 };

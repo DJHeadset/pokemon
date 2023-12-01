@@ -1,4 +1,6 @@
-const Mongoose = require("mongoose")
+const Mongoose = require("mongoose");
+const UserPokemon = require("./userpokemon");
+
 const UserSchema = new Mongoose.Schema({
   username: {
     type: String,
@@ -12,18 +14,19 @@ const UserSchema = new Mongoose.Schema({
   },
   dob: {
     type: Date,
-    required: true
+    required: true,
   },
   email: {
     type: String,
-    required: true
+    required: true,
   },
   role: {
     type: String,
     default: "Basic",
     required: true,
   },
-})
+  pokemons: [UserPokemon.schema],
+});
 
-const User = Mongoose.model("user", UserSchema)
-module.exports = User
+const User = Mongoose.model("user", UserSchema);
+module.exports = User;

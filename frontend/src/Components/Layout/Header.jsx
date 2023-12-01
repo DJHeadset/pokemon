@@ -23,7 +23,7 @@ function Header() {
 
   if (document.cookie) {
     const decodedCookie = jwtDecode(
-      document.cookie.substring(6, document.cookie.length - 1)
+      document.cookie.substring(5, document.cookie.length)
     );
     user = decodedCookie.username;
   }

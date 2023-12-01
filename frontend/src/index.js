@@ -13,6 +13,8 @@ import Register from './Components/Register';
 import Welcome from './Components/Welcome';
 import Admin from './Components/Admin';
 import User from './Components/User';
+import PokemonData from './Components/Pokemondata';
+import StarterPack from './Components/StarterPack';
 
 const router = createBrowserRouter([
   {
@@ -54,6 +56,14 @@ const router = createBrowserRouter([
       {
         path: "/won",
         element: <Won />
+      },
+      {
+        path: "/data",
+        element: <PokemonData />
+      },
+      {
+        path: "/starterpack",
+        element: <StarterPack />
       }
     ]
   }

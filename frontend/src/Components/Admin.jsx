@@ -20,15 +20,18 @@ function Admin() {
   }
 
   function onDelete(id) {
-    fetch("api/auth/deleteUser", {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify({ id: id }),
-    });
+    let answer = window.confirm("are you sure you want to delete user?");
+    if (answer) {
+      fetch("api/auth/deleteUser", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({ id: id }),
+      });
+    }
   }
 
   useEffect(() => {
@@ -38,7 +41,7 @@ function Admin() {
         setUsers(data.user);
         console.log(users);
       });
-  }, []);
+  }, [users]);
 
   return (
     users && (
@@ -47,8 +50,8 @@ function Admin() {
         <table>
           <thead>
             <tr>
-              <th>Username</th>
-              <th>user Role</th>
+              <th style={{ width: 200, textAlign: 'left' }}>Username</th>
+              <th style={{ width: 100, textAlign: 'left' }}>Role</th>
             </tr>
           </thead>
           <tbody>
