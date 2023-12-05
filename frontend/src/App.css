@@ -1,7 +1,8 @@
 body {
-  background-color: aqua;
+  background-color: #0075BE;
   font-family: "Press Start 2P", cursive;
 }
+
 
 
 .location-name {
@@ -279,7 +280,7 @@ body {
   transition: box-shadow 0.3s ease;
   font-size: 24px;
   font-weight: bold;
-  background-image: linear-gradient(to bottom right, #ff4242, #ff9d38);
+  background-image: linear-gradient(to bottom right, #d5a100, #ffcc00);
   text-shadow: 1px 1px 1px #444;
 }
 .pokemon-btn:active {
@@ -296,7 +297,7 @@ h1 {
   text-shadow: 1px 1px 2px #444;
   border-radius: 10px;
   padding: 20px;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 4px 4px 10px 1px rgba(0, 0, 0, 0.2);
 }
 
 .grow {

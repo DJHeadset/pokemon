@@ -1,11 +1,10 @@
 .Header nav ul {
     margin: 0;
-    padding: 0;
     list-style-type: none;
     display: flex;
     align-items: center;
     padding: 20px;
-    background-color: #ffcc33;
+    background-color: #ffcc00;
     border-radius: 10px;
     color: white;
     font-size: 32px;

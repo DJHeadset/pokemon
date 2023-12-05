@@ -16,6 +16,13 @@ function Admin() {
       },
       credentials: "include",
       body: JSON.stringify(user),
+    })
+    .then((response) => {
+      if (response.status === 201) {
+        fetchUserList();
+      } else {
+        console.error("Upgrade failed:", response.statusText);
+      }
     });
   }
 
@@ -30,18 +37,29 @@ function Admin() {
         },
         credentials: "include",
         body: JSON.stringify({ id: id }),
+      })
+      .then((response) => {
+        if (response.status === 201) {
+          fetchUserList();
+        } else {
+          console.error("Upgrade failed:", response.statusText);
+        }
       });
     }
   }
 
-  useEffect(() => {
+  const fetchUserList = () => {
     fetch("/api/auth/getusers")
       .then((res) => res.json())
       .then((data) => {
         setUsers(data.user);
         console.log(users);
       });
-  }, [users]);
+  };
+
+  useEffect(() => {
+    fetchUserList();
+  }, []);
 
   return (
     users && (
