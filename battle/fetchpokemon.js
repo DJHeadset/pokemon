@@ -36,6 +36,17 @@ const fetchPokemonData = async (pokemonId) => {
       // Fetch data for the growth rate
       const growthRateResponse = await fetch(speciesData.growth_rate.url);
       const growthRateData = await growthRateResponse.json();
+
+      //creating stats
+      const stats = pokemonData.stats.map(apiStat => ({
+        name: apiStat.stat.name,
+        base_stat: apiStat.base_stat,
+      }));
+
+      //craeting types
+      const types = pokemonData.types.map(apiType => ({
+        name: apiType.type.name
+      }))
   
       const pokemonEntry = {
         name: pokemonData.name,
@@ -46,8 +57,8 @@ const fetchPokemonData = async (pokemonId) => {
           back_default: pokemonData.sprites.back_default,
           front_default: pokemonData.sprites.front_default,
         },
-        stats: pokemonData.stats,
-        types: pokemonData.types,
+        stats: stats,
+        types: types,
         capture_rate: speciesData.capture_rate,
         evolution_chain: speciesData.evolution_chain.url,
         growth_rate: {

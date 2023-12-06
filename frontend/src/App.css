@@ -3,7 +3,21 @@ body {
   font-family: "Press Start 2P", cursive;
 }
 
-
+.selector {
+  display: flex;
+  justify-content: center;
+  margin: 2em;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 10px;
+  box-shadow: 4px 4px 10px 0px rgba(0, 0, 0, 0.3);
+  width: 850px;
+  padding: 20px;
+  font-size: 30px;
+  font-weight: bold;
+  text-align: center;
+  text-shadow: 2px 2px 0 #fff, -2px -2px 0 #fff, 2px -2px 0 #fff, -2px 2px 0 #fff;
+}
 
 .location-name {
   display: flex;

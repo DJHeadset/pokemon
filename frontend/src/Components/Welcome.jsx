@@ -58,7 +58,6 @@ function Welcome() {
           res.json().then((data) => window.alert(data.message));
         }
       });
-      //.then((data) => navigate("/starterpack"))
     }
   };
 
@@ -80,7 +79,7 @@ function Welcome() {
         const cookie = decoder();
         redirect(cookie.role);
       } else {
-        res.json().then((data) => window.alert(data.message));
+        res.json().then((data) => window.alert(data.error));
       }
     });
   };
