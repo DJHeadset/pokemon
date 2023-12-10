@@ -23,7 +23,6 @@ A web application using the React Router, with a strong focus on the popular gam
 ![Detiled view of chozen and enemy pokemon with a big "ATTACK" button](./frontend/src/resources/readmePics/battle.jpg)
 
 ## Future Roadmap
-- User management
 - Pokemon beloning to users and leveling system
 - Tournaments and battles
 

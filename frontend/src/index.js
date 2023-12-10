@@ -8,13 +8,12 @@ import Battle from './Components/Battle';
 import Lost from './Components/Lost';
 import Won from './Components/Win';
 import Header from './Components/Layout/Header';
-import Login from './Components/Login';
-import Register from './Components/Register';
 import Welcome from './Components/Welcome';
 import Admin from './Components/Admin';
 import User from './Components/User';
 import PokemonData from './Components/Pokemondata';
 import StarterPack from './Components/StarterPack';
+import Map from './Components/Map';
 
 const router = createBrowserRouter([
   {
@@ -24,14 +23,6 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <Welcome />,
-      },
-      {
-        path: "/login",
-        element: <Login />,
-      },
-      {
-        path: "/register",
-        element: <Register />,
       },
       {
         path: "/admin",
@@ -64,6 +55,10 @@ const router = createBrowserRouter([
       {
         path: "/starterpack",
         element: <StarterPack />
+      },
+      {
+        path: "/map",
+        element: <Map />
       }
     ]
   }

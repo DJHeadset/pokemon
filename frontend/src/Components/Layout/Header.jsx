@@ -2,6 +2,7 @@ import { Link, Outlet, useLocation } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 
 import "./Header.css";
+import decoder from "../Decoder";
 
 function Header() {
   let page = useLocation();
@@ -21,12 +22,16 @@ function Header() {
     pageName = pageName.charAt(0).toUpperCase() + pageName.slice(1);
   }
 
-  if (document.cookie) {
+  const cookie = decoder();
+  if(cookie) {
+    user=cookie.username
+  }
+  /* if (document.cookie) {
     const decodedCookie = jwtDecode(
       document.cookie.substring(5, document.cookie.length)
     );
     user = decodedCookie.username;
-  }
+  } */
 
   return (
     <div className="Header">
@@ -37,7 +42,7 @@ function Header() {
           </li>
           <li className="grow location-title">{pageName}</li>
           <li>
-            <Link to="/login">{user ? user : "LOGIN"}</Link>
+            <Link to="/user">{user ? user : "LOGIN"}</Link>
           </li>
         </ul>
       </nav>

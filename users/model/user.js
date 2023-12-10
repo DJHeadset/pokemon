@@ -25,6 +25,14 @@ const UserSchema = new Mongoose.Schema({
     default: "Basic",
     required: true,
   },
+  gold: {
+    type: Number,
+    default: 0,
+  },
+  experience: {
+    type: Number,
+    default: 0,
+  },
   pokemons: [UserPokemon.schema],
 });
 

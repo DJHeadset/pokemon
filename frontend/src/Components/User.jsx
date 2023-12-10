@@ -1,12 +1,110 @@
-
+import { useEffect, useState } from "react";
+import Loading from "./Loading/Loading";
+import { useNavigate } from "react-router-dom";
+import decoder from "./Decoder";
 
 function User() {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [pokeActive, setPokeActive] = useState(false);
 
-    return(
-        <>
-        <div>USER</div>
-        </>
-    )
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    fetch("/api/auth/logout");
+    navigate("/");
+  };
+
+  const fetchUserData = () => {
+    const cookie = decoder();
+    if (cookie === undefined) {
+      window.alert("user is not logged in");
+      navigate("/");
+    } else {
+      fetch("/api/auth/getuser")
+        .then((res) => res.json())
+        .then((data) => {
+          setLoading(false);
+          setUser(data);
+        });
+    }
+  };
+
+  useEffect(() => {
+    fetchUserData();
+  }, []);
+
+  if (loading) {
+    return <Loading />;
+  } else if (user) {
+    return (
+      <>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <label>Username: {user.username}</label>
+            <label>Gold: {user.gold}</label>
+            <label>Experience: {user.experience}</label>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <button className="pokemon-btn" onClick={() => handleLogout()}>
+              Logout
+            </button>
+            <button className="pokemon-btn" onClick={() => (navigate("/map"))}>Map</button>
+            <button
+              className="pokemon-btn"
+              onClick={() => setPokeActive(!pokeActive)}
+            >
+              Pokemons
+            </button>
+          </div>
+        </div>
+        <div>
+          {pokeActive ? (
+            <div style={{ display: "flex", flexWrap: "wrap", margin: "2em" }}>
+              {user.pokemons.map((pokemon) => (
+                <div className="cards" key={pokemon.id} id={pokemon.id}>
+                  <img alt="poke-Icon" src={pokemon.sprites.front_default} />
+                  <div className="Poke-Name">{pokemon.name}</div>
+                  <div className="Poke-Stats">
+                    <p>
+                      HP: {pokemon.stats[0].base_stat}/
+                      {pokemon.stats[6].base_stat}
+                    </p>
+                    <p>Attack: {pokemon.stats[1].base_stat}</p>
+                    <p>Defense: {pokemon.stats[2].base_stat}</p>
+                  </div>
+                  <div className="pokemon-types">
+                    {pokemon.types.map((type) => (
+                      <span
+                        key={type.name}
+                        className={`pokemon-type ${type.name}`}
+                      >
+                        {type.name}
+                      </span>
+                    ))}
+                  </div>
+                  <button
+                    className="pokemon-btn"
+                    onClick={() => console.log(pokemon.name)}
+                  >
+                    DETAILS
+                  </button>
+                </div>
+              ))}
+            </div>
+          ) : (
+            ""
+          )}
+        </div>
+      </>
+    );
+  }
 }
 
-export default User
+export default User;

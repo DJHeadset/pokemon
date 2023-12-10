@@ -35,7 +35,6 @@ const PokemonSchema = new Mongoose.Schema({
     required: true,
   },
   pokeId: {
-    //pokemon's species ID
     type: String,
     required: true,
   },

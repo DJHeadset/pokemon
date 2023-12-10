@@ -16,8 +16,7 @@ function Admin() {
       },
       credentials: "include",
       body: JSON.stringify(user),
-    })
-    .then((response) => {
+    }).then((response) => {
       if (response.status === 201) {
         fetchUserList();
       } else {
@@ -37,8 +36,7 @@ function Admin() {
         },
         credentials: "include",
         body: JSON.stringify({ id: id }),
-      })
-      .then((response) => {
+      }).then((response) => {
         if (response.status === 201) {
           fetchUserList();
         } else {
@@ -68,8 +66,8 @@ function Admin() {
         <table>
           <thead>
             <tr>
-              <th style={{ width: 200, textAlign: 'left' }}>Username</th>
-              <th style={{ width: 100, textAlign: 'left' }}>Role</th>
+              <th style={{ width: 200, textAlign: "left" }}>Username</th>
+              <th style={{ width: 100, textAlign: "left" }}>Role</th>
             </tr>
           </thead>
           <tbody>

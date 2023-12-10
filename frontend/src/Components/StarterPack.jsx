@@ -2,8 +2,7 @@ import { useNavigate } from "react-router-dom";
 import starterpack from "../resources/starterpacks.json";
 
 function StarterPack() {
-
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleSelect = (event) => {
     const id = event.target.id;
@@ -18,8 +17,7 @@ function StarterPack() {
             },
             credentials: "same-origin",
             body: JSON.stringify(data),
-          })
-          .then(navigate("/user"))
+          }).then(navigate("/user"))
         );
     });
   };

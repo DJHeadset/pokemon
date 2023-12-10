@@ -67,7 +67,6 @@ exports.register = async (req, res, next) => {
             }
           );
           res.cookie("user", token, {
-            httpOnly: true,
             maxAge: maxAge * 1000, // 3hrs in ms
           });
           res.status(201).json({
@@ -201,4 +200,23 @@ exports.getUsers = async (req, res, next) => {
     .catch((err) =>
       res.status(401).json({ message: "Not successful", error: err.message })
     );
+};
+
+exports.getUser = async (req, res, next) => {
+  const token = req.headers.cookie.substring(5, req.headers.cookie.length);
+  if (token) {
+    jwt.verify(token, jwtSecret, async (err, decodedToken) => {
+      if (err) {
+        return res.status(401).json({ message: "Not authorized", valami: err });
+      } else {
+        await User.findById(decodedToken.id).then((user) => {
+          res.status(200).json(user);
+        });
+      }
+    });
+  }
+};
+
+exports.logout = async (req, res, next) => {
+  res.clearCookie("user").send();
 };
