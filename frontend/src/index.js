@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import './index.css';
-import App from './App';
+
+import './App.css'
 import EnemyPokemon from './Components/EnemyPokemon';
 import Battle from './Components/Battle';
 import Lost from './Components/Lost';
