@@ -1,0 +1,2 @@
+Pokemon details
+implement NoTrust

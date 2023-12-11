@@ -10,11 +10,15 @@
 - [License](#license)
 
 ## Description
-A web application using the React Router, with a strong focus on the popular game "Pokemon". the project utilises Github Actions, when there is  apush to the main branch, github will compile and upload the frontend's Docker container to DockerHub.
+Welcome to the world of Pokémon! This web application, built using React Router, invites you to embark on an exciting journey inspired by the beloved Pokémon game. The project leverages the power of GitHub Actions, automatically deploying the frontend Docker container to DockerHub upon each push to the main branch.
+
+The application adopts a microservices architecture, with distinct backends managing user controls and Pokémon battles. Security is paramount, ensured through the use of JSON Web Tokens (jsonwebtoken). 
+
+
 
 ## Features
-- Home page with a list of available cities.
-![List of cities](./frontend/src/resources/readmePics/cities.jpg)
+- Home page with aminated login/sign in.
+![welcome](./frontend/src/resources/readmePics/welcome.gif)
 
 - Choose your own Pokemon to battle against a randomly selected enemy from the chosen city.
 ![List of own pokemons with pictures and their names on the left sid and a detailed view of the enemy pokemon on the right](./frontend/src/resources/readmePics/ownPokemon.jpg)
@@ -22,18 +26,24 @@ A web application using the React Router, with a strong focus on the popular gam
 - Engage in a battle with our interactive battle interface.
 ![Detiled view of chozen and enemy pokemon with a big "ATTACK" button](./frontend/src/resources/readmePics/battle.jpg)
 
-## Future Roadmap
-- Pokemon beloning to users and leveling system
-- Tournaments and battles
+### Future Roadmap
+- **Leveling System:** Implementing a leveling system to enhance the gaming experience.
+- **Battle Rework:** Improving and refining the battle mechanics.
+- **Player vs. Player (PvP):** Introducing the ability for players to battle each other.
+- **Tournaments:** Setting the stage for epic Pokémon tournaments.
 
 ## Technologies Used
-<img alt="Static Badge" src="https://img.shields.io/badge/React_Router-react?style=plastic&logo=reactrouter&label=6.18.0&labelColor=blue&color=%23CA4245" height="30">
+<img alt="Static Badge" src="https://img.shields.io/badge/React-react?style=plastic&logo=reactrouter&label=6.18.0&labelColor=blue&color=%23CA4245" height="30">
 
 <img alt="Static Badge" src="https://img.shields.io/badge/Node.js-node?style=plastic&logo=nodedotjs&logoColor=white&label=18.2.0&labelColor=%23339933" height="30">
 
 <img alt="Static Badge" src="https://img.shields.io/badge/Github_Actions-github?style=plastic&logo=githubactions&logoColor=white&color=%232088FF" height="30">
 
 <img alt="Static Badge" src="https://img.shields.io/badge/Docker-docker?style=plastic&logo=docker&color=blue" height="30">
+
+<img alt="Static Badge" src="https://img.shields.io/badge/JsonWebToken-token?style=plastic&logo=jsonwebtokens&color=blue" height="30">
+
+<img alt="Static Badge" src="https://img.shields.io/badge/Mongo-mongo?logo=mongodb&color=green" height="30">
 
 
 ## Getting Started
@@ -51,5 +61,29 @@ npm i
 node start
 ```
 
+In a different terminal:
+1. Enter the user folder
+2. Install dependencies
+3. Start backend #1
+
+```
+cd user
+npm i
+npm run dev
+```
+
+In a different terminal:
+1. Enter the battle folder
+2. Install dependencies
+3. Start backend #2
+
+```
+cd battle
+npm i
+npm run dev
+```
+
 ## License
 This project is open-source and available under the [MIT License](LICENSE).
+
+**Note:** Pokémon is a trademark of Nintendo, Game Freak, and Creatures. This project is a fan-made game and is not affiliated with or endorsed by the creators of Pokémon. All Pokémon-related content is the intellectual property of Nintendo, Game Freak, and Creatures. The use of Pokémon in this project is for creative and educational purposes.
