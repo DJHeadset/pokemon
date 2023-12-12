@@ -1,40 +1,43 @@
 import { useEffect, useState } from "react";
 import Loading from "./Loading/Loading";
-
+import "../App.css";
 
 function Map() {
-  const [cityList, setCityList] = useState([])
-  const [loading, setLoading] = useState(true)
-  
-  const fetchCityData = () => {
-    return fetch("https://pokeapi.co/api/v2/location")
-    .then((res) => res.json()
-    .then((names) => names.results.map((e) => {return e.name}))
-    );
+  const [regions, setRegions] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const handleClick = (city) => {
+    console.log(city);
   };
 
+  const fetchRegions = async () => {
+    const response = await fetch("pokemon/region");
+    const regionData = await response.json();
+    return regionData;
+  };
   useEffect(() => {
-    fetchCityData().then((cities) => {
+    fetchRegions().then((regions) => {
       setLoading(false);
-      setCityList(cities);
+      setRegions(regions);
     });
   }, []);
-  
+
   if (loading) {
     return <Loading />;
-  } else if (cityList) {
+  } else if (regions) {
     return (
-    <>
-      <div className="location-name">
-        {cityList.map((city, i) => (
-          <h2 key={i}>
-            <div>{city}</div>
-          </h2>
-        ))}
+      <div>
+        <h2 style={{ display: "flex", justifyContent: "center" }}>Regions</h2>
+        <div className="location-name">
+          {regions.map((region) => (
+            <h2 key={region.id} onClick={() => handleClick(region)}>
+              {region.name}
+            </h2>
+          ))}
+        </div>
       </div>
-    </>
-  );
-    }
+    );
+  }
 }
 
 export default Map;

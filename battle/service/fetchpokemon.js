@@ -1,11 +1,4 @@
-const express = require("express");
-
-const app = express();
-app.use(express.json({ limit: "25mb" }));
-const PORT = 5001;
-app.listen(PORT, () => console.log(`Server Connected to port ${PORT}`));
-
-app.get("/pokemon/pokedata/:id", async (req, res) => {
+exports.pokedata = async (req, res, next) => {
   const id = req.params.id;
   try {
     const response = await fetchPokemonData(id);
@@ -14,7 +7,7 @@ app.get("/pokemon/pokedata/:id", async (req, res) => {
     console.error("Error in /welcome route:", error);
     res.status(500).send("Internal Server Error");
   }
-});
+};
 
 const fetchPokemonData = async (pokemonId) => {
   try {

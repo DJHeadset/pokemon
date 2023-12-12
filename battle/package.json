@@ -1,10 +1,10 @@
 {
   "name": "pokemon",
   "version": "1.0.0",
-  "main": "fetchpokemon.js",
+  "main": "battleserver.js",
   "scripts": {
-    "start": "node fetchpokemon.js",
-    "dev": "nodemon fetchpokemon.js"
+    "start": "node battleserver.js",
+    "dev": "nodemon battleserver.js"
   },
   "author": "",
   "license": "ISC",

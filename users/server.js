@@ -7,7 +7,7 @@ const server = app.listen(PORT, () =>
   console.log(`Server Connected to port ${PORT}`)
 );
 const connectDB = require("./db");
-const { adminAuth, userAuth } = require("./middleware/auth");
+const { adminAuth } = require("./middleware/auth");
 
 //Connecting the Database
 connectDB();
@@ -15,11 +15,6 @@ connectDB();
 app.use(express.json());
 app.use("/api/auth", require("./auth/route"));
 app.use(cookieParser());
-
-app.get("/admin", adminAuth, (req, res) => res.send("Admin Route"));
-app.get("/logout", (req, res) => {
-  res.cookie("jwt", "", { maxAge: "1" });
-});
 
 // Handling Error
 process.on("unhandledRejection", (err) => {
