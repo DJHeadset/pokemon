@@ -12,9 +12,9 @@ const { adminAuth } = require("./middleware/auth");
 //Connecting the Database
 connectDB();
 
+app.use(cookieParser());
 app.use(express.json());
 app.use("/api/auth", require("./auth/route"));
-app.use(cookieParser());
 
 // Handling Error
 process.on("unhandledRejection", (err) => {

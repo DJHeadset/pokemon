@@ -2,34 +2,51 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
 
 env:
-  DOCKER_IMAGE: 'djheadset/pokemon:latest'
+  DOCKER_IMAGE: 'djheadset/pokemon'
 
 jobs:
   docker:
     runs-on: ubuntu-latest
     steps:
-      -
-        name: Checkout
+      - name: Checkout
         uses: actions/checkout@v3
-      -
-        name: Set up QEMU
+
+      - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
-      -
-        name: Set up Docker Buildx
+
+      - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-      -
-        name: Login to Docker Hub
+
+      - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-      -
-        name: Frontend build and push
+
+      - name: Frontend build and push
         uses: docker/build-push-action@v5
+        if: contains(github.event_path, 'frontend/') # Run only if changes are in the 'frontend' directory
         with:
           context: ./frontend
           push: true
-          tags: ${{ env.DOCKER_IMAGE }}
+          tags: ${{ env.DOCKER_IMAGE }}-frontend:latest
+
+      - name: Battle build and push
+        uses: docker/build-push-action@v5
+        if: contains(github.event_path, 'battle/') # Run only if changes are in the 'battle' directory
+        with:
+          context: ./battle
+          push: true
+          tags: ${{ env.DOCKER_IMAGE }}-battle:latest
+
+      - name: Users build and push
+        uses: docker/build-push-action@v5
+        if: contains(github.event_path, 'users/') # Run only if changes are in the 'users' directory
+        with:
+          context: ./users
+          push: true
+          tags: ${{ env.DOCKER_IMAGE }}-users:latest

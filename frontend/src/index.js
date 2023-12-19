@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-
 import './App.css'
 import EnemyPokemon from './Components/EnemyPokemon';
 import Battle from './Components/Battle';
@@ -14,6 +13,7 @@ import User from './Components/User';
 import PokemonData from './Components/Pokemondata';
 import StarterPack from './Components/StarterPack';
 import Map from './Components/Map';
+import City from './Components/City';
 
 const router = createBrowserRouter([
   {
@@ -59,6 +59,10 @@ const router = createBrowserRouter([
       {
         path: "/map",
         element: <Map />
+      },
+      {
+        path: "/city/:id",
+        element: <City />
       }
     ]
   }
