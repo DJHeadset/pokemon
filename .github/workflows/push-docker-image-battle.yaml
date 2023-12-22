@@ -2,7 +2,7 @@ name: Battle Docker Image CI
 
 on:
   push:
-    branches: [ "test" ]
+    branches: [ "main" ]
     paths: [ "battle/**" ]
 
 env:
