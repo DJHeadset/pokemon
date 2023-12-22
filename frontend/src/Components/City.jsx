@@ -14,9 +14,9 @@ function City() {
     return cityData;
   };
 
-  const handleClick= (method) => {
-    console.log(method)
-  }
+  const handleClick = (method) => {
+    console.log(method);
+  };
 
   useEffect(() => {
     fetchCity(id).then((methods) => {
@@ -32,7 +32,9 @@ function City() {
       <>
         <div>{methods.name}</div>
         {methods.encounters.map((method, index) => (
-          <button key={index} onClick={() => handleClick(method)}>{method}</button>
+          <button key={index} onClick={() => handleClick(method)}>
+            {method}
+          </button>
         ))}
       </>
     );

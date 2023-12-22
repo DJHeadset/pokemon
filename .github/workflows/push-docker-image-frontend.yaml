@@ -6,7 +6,7 @@ on:
     paths: [ "frontend/**" ]
 
 env:
-  DOCKER_IMAGE_FRONTEND: "djheadset/pokemon_frontend:latest"
+  DOCKER_IMAGE_FRONTEND: 'djheadset/pokemon_frontend:latest'
 
 jobs:
   docker:
@@ -31,6 +31,6 @@ jobs:
         name: Users build and push
         uses: docker/build-push-action@v5
         with:
-          context: ./users
+          context: ./frontend
           push: true
           tags: ${{ env.DOCKER_IMAGE_FRONTEND }}

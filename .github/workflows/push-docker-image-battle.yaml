@@ -6,7 +6,7 @@ on:
     paths: [ "battle/**" ]
 
 env:
-  DOCKER_IMAGE_BATTLE: "djheadset/pokemon_battle:latest"
+  DOCKER_IMAGE_BATTLE: 'djheadset/pokemon_battle:latest'
 
 jobs:
   docker:
@@ -31,6 +31,6 @@ jobs:
         name: Users build and push
         uses: docker/build-push-action@v5
         with:
-          context: ./users
+          context: ./battle
           push: true
           tags: ${{ env.DOCKER_IMAGE_BATTLE }}

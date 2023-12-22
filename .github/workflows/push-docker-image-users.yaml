@@ -6,7 +6,7 @@ on:
     paths: [ "users/**" ]
 
 env:
-  DOCKER_IMAGE_USERS: "djheadset/pokemon_users:latest"
+  DOCKER_IMAGE_USERS: 'djheadset/pokemon_users:latest'
 
 jobs:
   docker:
