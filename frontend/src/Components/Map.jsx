@@ -11,10 +11,6 @@ function Map() {
 
   const navigate = useNavigate();
 
-  const handleSelectRegion = (region) => {
-    setSelectedRegion(region);
-  };
-
   const handleSelectCity = async (e) => {
     const id = e.url
       .split("/")
@@ -54,7 +50,7 @@ function Map() {
         <h2 style={{ display: "flex", justifyContent: "center" }}>Regions</h2>
         <div className="location-name">
           {regions.map((region) => (
-            <h2 key={region.id} onClick={() => handleSelectRegion(region)}>
+            <h2 key={region.id} onClick={() => setSelectedRegion(region)}>
               {region.name}
             </h2>
           ))}

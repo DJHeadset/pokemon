@@ -24,6 +24,21 @@ const fetchAreaData = async (URL) => {
   }
 };
 
+const encounterMethod = (method) => {
+  return method.toLowerCase().includes("rod") ? "fishing" : method;
+};
+
+const uniqueEncounterMethods = (areas) => {
+  const uniqueEncounterMethods = [
+    ...new Set(
+      areas?.pokemons.flatMap((pokemon) =>
+        pokemon.encounter.map((detail) => encounterMethod(detail.method))
+      )
+    ),
+  ];
+  return uniqueEncounterMethods;
+};
+
 exports.regions = async (req, res, next) => {
   const regionData = [];
   for (let i = 1; i < 11; i++) {
@@ -38,4 +53,31 @@ exports.location = async (req, res, next) => {
   const URL = `https://pokeapi.co/api/v2/location/${req.params.id}/`;
   const data = await fetchAreaData(URL);
   res.json(data);
+};
+
+exports.city = async (req, res, next) => {
+  const id = req.params.id;
+  const response = await fetch(`https://pokeapi.co/api/v2/location-area/${id}`);
+  const locationData = await response.json();
+
+  const formattedAreaData = {
+    pokemons: locationData.pokemon_encounters.map((encounter) => {
+      const encounterDetails =
+        encounter.version_details[0].encounter_details.map((detail) => ({
+          method: detail.method.name,
+        }));
+
+      return {
+        name: encounter.pokemon.name,
+        encounter: encounterDetails,
+      };
+    }),
+  };
+
+  const data = {
+    name: locationData.name,
+    encounters: uniqueEncounterMethods(formattedAreaData),
+  };
+
+  res.send(data);
 };

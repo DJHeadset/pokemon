@@ -1,4 +1,4 @@
-name: Users Docker Image CI
+name: Battle Docker Image CI
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
     paths: [ "battle/**" ]
 
 env:
-  DOCKER_IMAGE_BATTLE: "djheadset/battle:latest"
+  DOCKER_IMAGE_BATTLE: "djheadset/pokemon_battle:latest"
 
 jobs:
   docker:

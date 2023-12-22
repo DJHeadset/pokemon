@@ -1,4 +1,4 @@
-name: Users Docker Image CI
+name: Frontend Docker Image CI
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
     paths: [ "frontend/**" ]
 
 env:
-  DOCKER_IMAGE_FRONTEND: "djheadset/frontend:latest"
+  DOCKER_IMAGE_FRONTEND: "djheadset/pokemon_frontend:latest"
 
 jobs:
   docker:
