@@ -8,7 +8,6 @@ function City() {
   const { id } = useParams();
 
   const fetchCity = async (id) => {
-    console.log(id);
     const response = await fetch(`/pokemon/city/${id}`);
     const cityData = await response.json();
     return cityData;
@@ -18,6 +17,11 @@ function City() {
     console.log(method);
     const response = await fetch(`/pokemon/randompokemon/${id}/${method}`);
     const pokemon = await response.json();
+    if(pokemon.name) {
+      window.alert(pokemon.name)
+    } else {
+      window.alert(pokemon.message)
+    }
   };
 
   useEffect(() => {

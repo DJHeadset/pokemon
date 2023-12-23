@@ -25,7 +25,50 @@ const fetchAreaData = async (URL) => {
 };
 
 const encounterMethod = (method) => {
-  return method.toLowerCase().includes("rod") ? "fishing" : method;
+  switch (method) {
+    case "surf":
+    case "surf-spots":
+    case "seaweed":
+    case "roaming-water":
+      return "water";
+
+    case "walk":
+    case "dark-grass":
+    case "grass-spots":
+    case "cave-spots":
+    case "bridge-spots":
+    case "yellow-flowers":
+    case "purple-flowers":
+    case "red-flowers":
+    case "rough-terrain":
+    case "roaming-grass":
+      return "walk";
+
+    case "headbutt":
+    case "headbutt-low":
+    case "headbutt-normal":
+    case "headbutt-high":
+      return "headbutt";
+
+    case "super-rod":
+    case "good-rod":
+    case "old-rod":
+    case "super-rod-spots":
+    case "feebas-tile-fishing":
+      return "fishing";
+
+    case "gift":
+    case "gift-egg":
+    case "only-one":
+      return "gift";
+
+    case "squirt-bottle":
+    case "wailmer-pail":
+      return "Sudowoodo";
+
+    default:
+      return method;
+  }
 };
 
 const uniqueEncounterMethods = (areas) => {

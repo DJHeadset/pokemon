@@ -30,6 +30,14 @@ const LevelSchema = new Mongoose.Schema({
 });
 
 const PokemonSchema = new Mongoose.Schema({
+  level: {
+    type: Number,
+    default: 0,
+  },
+  unique: {
+    type: Boolean,
+    default: false,
+  },
   name: {
     type: String,
     required: true,
@@ -66,20 +74,8 @@ const PokemonSchema = new Mongoose.Schema({
     type: String,
     required: true,
   },
-  growth_rate: {
-    name: {
-      type: String,
-      required: true,
-    },
-    url: {
-      type: String,
-      required: true,
-    },
-  },
   levels: [LevelSchema],
 });
-
-
 
 const UserPokemon = Mongoose.model("userpokemon", PokemonSchema);
 module.exports = UserPokemon;

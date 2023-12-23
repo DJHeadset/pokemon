@@ -1,4 +1,4 @@
-name: Frontend Docker Image CI
+name: Users Docker Image CI
 
 on:
   push:

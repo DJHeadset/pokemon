@@ -34,7 +34,6 @@ exports.fetchPokemonData = async (pokemonId) => {
     }));
 
     const pokemonEntry = {
-      level: 0,
       name: pokemonData.name,
       pokeId: speciesData.id.toString(),
       species: speciesData.name,
@@ -47,10 +46,6 @@ exports.fetchPokemonData = async (pokemonId) => {
       types: types,
       capture_rate: speciesData.capture_rate,
       evolution_chain: speciesData.evolution_chain.url,
-      growth_rate: {
-        name: growthRateData.name,
-        url: speciesData.growth_rate.url,
-      },
       levels: growthRateData.levels,
     };
     return pokemonEntry;
