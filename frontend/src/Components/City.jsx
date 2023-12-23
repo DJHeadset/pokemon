@@ -14,8 +14,10 @@ function City() {
     return cityData;
   };
 
-  const handleClick = (method) => {
+  const handleClick = async (method) => {
     console.log(method);
+    const response = await fetch(`/pokemon/randompokemon/${id}/${method}`);
+    const pokemon = await response.json();
   };
 
   useEffect(() => {
