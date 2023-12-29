@@ -1,3 +1,4 @@
+const { calculateStats } = require("./calculatestats");
 const { fetchPokemonData } = require("./fetchpokemondata");
 
 function getRandomLevel(min, max) {
@@ -114,29 +115,18 @@ function getSudowoodo(encounters) {
   return pokeSet;
 }
 
+const methodFunctions = {
+  water: getWater,
+  walk: getWalk,
+  headbutt: getHeadbutt,
+  fishing: getFishing,
+  gift: getGift,
+  Sudowoodo: getSudowoodo,
+};
+
 function getPokemonSet(encounters, method) {
-  switch (method) {
-    case "water":
-      return getWater(encounters);
-
-    case "walk":
-      return getWalk(encounters);
-
-    case "headbutt":
-      return getHeadbutt(encounters);
-
-    case "fishing":
-      return getFishing(encounters);
-
-    case "gift":
-      return getGift(encounters);
-
-    case "Sudowoodo":
-      return getSudowoodo(encounters);
-
-    default:
-      return getPokemonByMethod(encounters, method);
-  }
+  const methodFunction = methodFunctions[method] || getPokemonByMethod;
+  return methodFunction(encounters, method);
 }
 
 function getRandomPokemon(pokeSet) {
@@ -180,7 +170,11 @@ exports.randomPokemon = async (req, res, next) => {
       const response = await fetchPokemonData(selectedPokemon.id);
       response.level = selectedPokemon.level;
       response.unique = selectedPokemon.unique;
-      res.send(response);
+      const levelledUpPokemon = calculateStats(response);
+      res.send({
+        message: `A wild ${response.name} appeared`,
+        pokemon: levelledUpPokemon,
+      });
     } else {
       res.send({ message: "no pokemon found" });
     }

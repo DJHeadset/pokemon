@@ -37,7 +37,7 @@ const router = createBrowserRouter([
         element: <EnemyPokemon />
       },
       {
-        path: "/battle/:own/:enemy",
+        path: "/battle",
         element: <Battle />
       },
       {

@@ -22,13 +22,14 @@ exports.fetchPokemonData = async (pokemonId) => {
     const stats = pokemonData.stats.map((apiStat) => ({
       name: apiStat.stat.name,
       base_stat: apiStat.base_stat,
+      stat: apiStat.base_stat,
     }));
     stats.push({
       name: "maxHp",
       base_stat: pokemonData.stats[0].base_stat,
     });
 
-    //craeting types
+    //creating types
     const types = pokemonData.types.map((apiType) => ({
       name: apiType.type.name,
     }));

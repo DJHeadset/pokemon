@@ -9,6 +9,14 @@ const StatSchema = new Mongoose.Schema({
     type: Number,
     required: true,
   },
+  stat: {
+    type: Number,
+    required: true,
+  },
+  EV: {
+    type: Number,
+    default: 0,
+  },
 });
 
 const TypeSchema = new Mongoose.Schema({

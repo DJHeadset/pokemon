@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import Loading from "./Loading/Loading";
 import { useNavigate } from "react-router-dom";
 import decoder from "./Decoder";
+import fetchUserData from "../service/userdata";
+//import fetchUserData from "../service/userdata";
 
 function User() {
   const [user, setUser] = useState(null);
@@ -15,23 +17,19 @@ function User() {
     navigate("/");
   };
 
-  const fetchUserData = () => {
-    const cookie = decoder();
-    if (cookie === undefined) {
+  const getUserData = async () => {
+    const cookie = await fetchUserData();
+    if (cookie === null) {
       window.alert("user is not logged in");
       navigate("/");
     } else {
-      fetch("/api/auth/getuser")
-        .then((res) => res.json())
-        .then((data) => {
-          setLoading(false);
-          setUser(data);
-        });
+      setLoading(false);
+      setUser(cookie);
     }
   };
 
   useEffect(() => {
-    fetchUserData();
+    getUserData();
   }, []);
 
   if (loading) {
@@ -55,7 +53,9 @@ function User() {
             <button className="pokemon-btn" onClick={() => handleLogout()}>
               Logout
             </button>
-            <button className="pokemon-btn" onClick={() => (navigate("/map"))}>Map</button>
+            <button className="pokemon-btn" onClick={() => navigate("/map")}>
+              Map
+            </button>
             <button
               className="pokemon-btn"
               onClick={() => setPokeActive(!pokeActive)}

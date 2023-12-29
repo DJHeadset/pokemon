@@ -1,71 +1,36 @@
-import { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import Loading from "./Loading/Loading";
-import ownPokemons from "../resources/pokemons.json";
+import { useLocation } from "react-router-dom";
 import battle from "../resources/pic/Battle.png";
+import { useEffect, useState } from "react";
 
 function Battle() {
-  const { own, enemy } = useParams();
-
-  const [ownPokemon, setOwnPokemon] = useState(null);
-  const [enemyPokemon, setEnemyPokemon] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const location = useLocation();
+  const { ownPokemon, enemyPokemon } = location.state;
+  //console.log(enemyPokemon.stats);
+  const [enemyPokemonStats, setEnemyPokemonStats] = useState(null);
+  const [ownPokemonStats, setOwnPokemonStats] = useState(null);
   const [enemyAttackNumber, setEnemyAttackNumber] = useState(0);
   const [attackNumber, setAttackNumber] = useState(0);
   const [turn, setTurn] = useState(0);
-  const [enemyPokemonStats, setEnemyPokemonStats] = useState(null);
-  const [ownPokemonStats, setOwnPokemonStats] = useState(null);
-
-  const navigate = useNavigate();
-
-  async function getOwnPokemon(own) {
-    ownPokemons.pokemons.forEach((pokemon) => {
-      if (pokemon.id === own * 1) {
-        setOwnPokemon(pokemon);
-      }
-    });
-  }
-
-  async function getEnemyPokemon(enemy) {
-    const URL = `https://pokeapi.co/api/v2/pokemon/${enemy}`;
-    const pokeResponse = await fetch(URL);
-    const enemyPokemonData = await pokeResponse.json();
-    setEnemyPokemon(enemyPokemonData);
-  }
 
   useEffect(() => {
     ownPokemon &&
       setOwnPokemonStats({
-        hp: ownPokemon.stats[0].base_stat,
-        att: ownPokemon.stats[1].base_stat,
-        def: ownPokemon.stats[2].base_stat,
+        hp: ownPokemon.stats[0].stat,
+        att: ownPokemon.stats[1].stat,
+        def: ownPokemon.stats[2].stat,
+        maxHp: ownPokemon.stats[6].base_stat,
       });
   }, [ownPokemon]);
 
   useEffect(() => {
     enemyPokemon &&
       setEnemyPokemonStats({
-        hp: enemyPokemon.stats[0].base_stat,
-        att: enemyPokemon.stats[1].base_stat,
-        def: enemyPokemon.stats[2].base_stat,
+        hp: enemyPokemon.stats[0].stat,
+        att: enemyPokemon.stats[1].stat,
+        def: enemyPokemon.stats[2].stat,
+        maxHp: enemyPokemon.stats[6].stat,
       });
   }, [enemyPokemon]);
-
-  useEffect(() => {
-    getOwnPokemon(own).then(() => {
-      getEnemyPokemon(enemy).then(() => {
-        setLoading(false);
-      });
-    });
-  }, [own, enemy]);
-
-  function winnerPokemon() {
-    if (enemyPokemonStats && enemyPokemonStats.hp <= 0) {
-      navigate("/won");
-    } else if (ownPokemonStats && ownPokemonStats.hp <= 0) {
-      navigate("/lost");
-    }
-  }
 
   function handleAttack() {
     const hp = enemyPokemonStats.hp;
@@ -101,10 +66,6 @@ function Battle() {
   }
 
   useEffect(() => {
-    winnerPokemon();
-  }, [enemyPokemonStats, ownPokemonStats]);
-
-  useEffect(() => {
     if (turn > 0) {
       const damageElement = document.getElementById("attackNumber");
       const enemyDamageElement = document.getElementById("enemyAttackNumber");
@@ -117,72 +78,58 @@ function Battle() {
     }
   }, [turn]);
 
-  if (loading) {
-    return <Loading />;
-  } else if (ownPokemonStats && enemyPokemonStats) {
+  if (ownPokemonStats && enemyPokemonStats) {
     return (
       <>
         <div className="card" style={{ backgroundImage: `url(${battle})` }}>
-          <div className="enemy-pokemon cards">
-            <div className="damage" id="attackNumber">
-              {attackNumber}
+          <div className="battle-container">
+            <div className="own-pokemon battlecards">
+              <div className="damage" id="enemyAttackNumber">
+                {enemyAttackNumber}
+              </div>
+              <div className="hp-bar-container">
+                <progress
+                  className="hp-bar"
+                  value={ownPokemonStats.hp}
+                  max={ownPokemonStats.maxHp}
+                />
+              </div>
+              <img
+                className="img"
+                alt="Poke-Icon"
+                src={ownPokemon.sprites.back_default}
+              />
+              <div className="Poke-Name">{ownPokemon.name}</div>
             </div>
-            <div className="Poke-Name">{enemyPokemon.name}</div>
-            <img
-              className="img"
-              alt="Poke-Icon"
-              src={enemyPokemon.sprites.front_default}
-            />
-            <div className="Poke-Stats">
-              <p>HP: {enemyPokemonStats.hp}</p>
-              <p>Attack: {enemyPokemonStats.att}</p>
-              <p>Defense: {enemyPokemonStats.def}</p>
+            <div className="enemy-pokemon battlecards">
+              <div className="damage" id="attackNumber">
+                {attackNumber}
+              </div>
+              <div className="hp-bar-container">
+                <progress
+                  className="hp-bar"
+                  value={enemyPokemonStats.hp}
+                  max={enemyPokemonStats.maxHp}
+                />
+              </div>
+              <img
+                className="img"
+                alt="Poke-Icon"
+                src={enemyPokemon.sprites.front_default}
+              />
+              <div className="Poke-Name">{enemyPokemon.name}</div>
             </div>
-            <div className="pokemon-types">
-              {enemyPokemon.types.map((type) => (
-                <span
-                  key={type.type.name}
-                  className={`pokemon-type ${type.type.name}`}
-                >
-                  {type.type.name}
-                </span>
-              ))}
-            </div>
+            <button
+              style={{ flexBasis: "10%" }}
+              className="pokemon-btn"
+              onClick={handleAttack}
+            >
+              ATTACK
+            </button>
           </div>
-          <div className="own-pokemon cards">
-            <div className="damage" id="enemyAttackNumber">
-              {enemyAttackNumber}
-            </div>
-            <div className="Poke-Name">{ownPokemon.name}</div>
-            <img
-              className="img"
-              alt="Poke-Icon"
-              src={ownPokemon.sprites.front_default}
-            />
-            <div className="Poke-Stats">
-              <p>HP: {ownPokemonStats.hp}</p>
-              <p>Attack: {ownPokemonStats.att}</p>
-              <p>Defense: {ownPokemonStats.def}</p>
-            </div>
-            <div className="pokemon-types">
-              {ownPokemon.types.map((type) => (
-                <span
-                  key={type.type.name}
-                  className={`pokemon-type ${type.type.name}`}
-                >
-                  {type.type.name}
-                </span>
-              ))}
-            </div>
-          </div>
-          <button className="pokemon-btn" onClick={handleAttack}>
-            ATTACK
-          </button>
         </div>
       </>
     );
-  } else {
-    return <div>Loading Pokémon data...</div>;
   }
 }
 
