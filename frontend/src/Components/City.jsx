@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Loading from "./Loading/Loading";
 import fetchUserData from "../service/userdata";
 
@@ -18,7 +18,8 @@ function City() {
   };
 
   const handleClick = async (method) => {
-    console.log(method);
+    setLoading(true);
+    //console.log(method);
     const response = await fetch(`/pokemon/randompokemon/${id}/${method}`);
     const data = await response.json();
     if (data.pokemon) {
@@ -29,10 +30,7 @@ function City() {
     } else {
       window.alert(data.message);
     }
-  };
-
-  const handleFight = () => {
-    console.log("fight");
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -77,7 +75,6 @@ function City() {
             ))}
           </div>
         </div>
-        <button onClick={() => handleFight()}>FIGHT</button>
         <button onClick={() => setEnemyPokemon(null)}>BACK</button>
         <div className="Own-Pokemon-Name">
           <label className="label">
@@ -94,7 +91,17 @@ function City() {
                 }}
                 className="options"
               >
-                <img alt="Poke-Icon" src={own.sprites.front_default} />
+                <div className="poke-info">
+                  <div className="hp-bar-container">
+                    <progress
+                      className="hp-bar"
+                      value={own.hp}
+                      max={own.maxHp}
+                    />
+                  </div>
+                  <img alt="Poke-Icon" src={own.sprites.front_default} />
+                </div>
+
                 <div className="poke-info">
                   <p>Level: {own.level}</p>
                   <p>{own.name}</p>

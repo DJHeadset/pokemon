@@ -27,7 +27,7 @@ function sortAndRemoveDuplicates(randomPokemons) {
 }
 
 function getPokemonByMethod(encounters, method) {
-  console.log(method);
+  //console.log(method);
   const randomPokemons = [];
   encounters.forEach((encounter) => {
     encounter.version_details.forEach((version) => {
@@ -131,7 +131,7 @@ function getPokemonSet(encounters, method) {
 
 function getRandomPokemon(pokeSet) {
   const random = getRandomPercent();
-  console.log(random);
+  //console.log(random);
   const eligiblePokemons = pokeSet.filter(
     (pokemon) => pokemon.chance >= random
   );
@@ -171,6 +171,7 @@ exports.randomPokemon = async (req, res, next) => {
       response.level = selectedPokemon.level;
       response.unique = selectedPokemon.unique;
       const levelledUpPokemon = calculateStats(response);
+      //console.log(levelledUpPokemon.unique)
       res.send({
         message: `A wild ${response.name} appeared`,
         pokemon: levelledUpPokemon,

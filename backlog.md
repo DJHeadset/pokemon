@@ -5,3 +5,4 @@ Evolution
 - No Trust
     user permissions in the database, only UserId in cookie 
 - Rename own pokemon
+- Implement moves

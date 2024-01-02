@@ -5,20 +5,15 @@ import { useEffect, useState } from "react";
 function Battle() {
   const location = useLocation();
   const { ownPokemon, enemyPokemon } = location.state;
-  //console.log(enemyPokemon.stats);
   const [enemyPokemonStats, setEnemyPokemonStats] = useState(null);
   const [ownPokemonStats, setOwnPokemonStats] = useState(null);
-  const [enemyAttackNumber, setEnemyAttackNumber] = useState(0);
-  const [attackNumber, setAttackNumber] = useState(0);
-  const [turn, setTurn] = useState(0);
 
   useEffect(() => {
     ownPokemon &&
       setOwnPokemonStats({
         hp: ownPokemon.stats[0].stat,
-        att: ownPokemon.stats[1].stat,
-        def: ownPokemon.stats[2].stat,
         maxHp: ownPokemon.stats[6].base_stat,
+        attack: ownPokemon.attack,
       });
   }, [ownPokemon]);
 
@@ -26,57 +21,61 @@ function Battle() {
     enemyPokemon &&
       setEnemyPokemonStats({
         hp: enemyPokemon.stats[0].stat,
-        att: enemyPokemon.stats[1].stat,
-        def: enemyPokemon.stats[2].stat,
         maxHp: enemyPokemon.stats[6].stat,
+        attack: enemyPokemon.attack,
       });
   }, [enemyPokemon]);
 
-  function handleAttack() {
-    const hp = enemyPokemonStats.hp;
-    const att = ownPokemonStats.att;
-    const def = enemyPokemonStats.def;
-    const rnd = Math.floor(Math.random() * 38) + 217;
-    const attack = Math.floor(
-      ((((2 / 5 + 2) * att * 60) / def / 50 + 2) * rnd) / 255
-    );
+  async function handleAttack() {
+    const response = await fetch(`/pokemon/battle/attack`);
+    const data = await response.json();
+    console.log(data);
     setEnemyPokemonStats({
       ...enemyPokemonStats,
-      hp: hp - attack,
+      hp: data.enemy.hp,
+      attack: data.enemy.attack,
     });
-    setAttackNumber(attack);
-    handleAttackBack();
-  }
-
-  function handleAttackBack() {
-    const hp = ownPokemonStats.hp;
-    const att = enemyPokemonStats.att;
-    const def = ownPokemonStats.def;
-    const rnd = Math.floor(Math.random() * 38) + 217;
-    const attack = Math.floor(
-      ((((2 / 5 + 2) * att * 60) / def / 50 + 2) * rnd) / 255
-    );
-
     setOwnPokemonStats({
       ...ownPokemonStats,
-      hp: hp - attack,
+      hp: data.own.hp,
+      attack: data.own.attack,
     });
-    setEnemyAttackNumber(attack);
-    setTurn(turn + 1);
+    showAttackNumber();
   }
 
-  useEffect(() => {
-    if (turn > 0) {
-      const damageElement = document.getElementById("attackNumber");
-      const enemyDamageElement = document.getElementById("enemyAttackNumber");
-      damageElement.classList.add("animated");
-      enemyDamageElement.classList.add("animated");
-      setTimeout(() => {
-        damageElement.classList.remove("animated");
-        enemyDamageElement.classList.remove("animated");
-      }, 1000);
+  function showAttackNumber() {
+    const damageElement = document.getElementById("attackNumber");
+    const enemyDamageElement = document.getElementById("enemyAttackNumber");
+    damageElement.classList.add("animated");
+    enemyDamageElement.classList.add("animated");
+    setTimeout(() => {
+      damageElement.classList.remove("animated");
+      enemyDamageElement.classList.remove("animated");
+    }, 1000);
+  }
+
+  const setupBattle = async () => {
+    console.log(enemyPokemon);
+
+    const response = await fetch(`/pokemon/battle/battlesetup`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "same-origin",
+      body: JSON.stringify({ enemy: enemyPokemon, own: ownPokemon }),
+    });
+
+    if (response.ok) {
+      console.log("Battle setup completed successfully");
+    } else {
+      console.error("Error setting up the battle");
     }
-  }, [turn]);
+  };
+
+  useEffect(() => {
+    setupBattle();
+  }, []);
 
   if (ownPokemonStats && enemyPokemonStats) {
     return (
@@ -85,7 +84,7 @@ function Battle() {
           <div className="battle-container">
             <div className="own-pokemon battlecards">
               <div className="damage" id="enemyAttackNumber">
-                {enemyAttackNumber}
+                {ownPokemonStats.attack}
               </div>
               <div className="hp-bar-container">
                 <progress
@@ -103,7 +102,7 @@ function Battle() {
             </div>
             <div className="enemy-pokemon battlecards">
               <div className="damage" id="attackNumber">
-                {attackNumber}
+                {enemyPokemonStats.attack}
               </div>
               <div className="hp-bar-container">
                 <progress

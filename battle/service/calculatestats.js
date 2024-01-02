@@ -1,6 +1,5 @@
 exports.calculateStats = (pokemon) => {
   let level = pokemon.level;
-  level = 50
   if (level > 0) {
     for (let i = 0; i < pokemon.stats.length; i++) {
       const baseStat = pokemon.stats[i].base_stat;
