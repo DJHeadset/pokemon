@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import battle from "../resources/pic/Battle.png";
 import { useEffect, useState } from "react";
 
@@ -7,6 +7,8 @@ function Battle() {
   const { ownPokemon, enemyPokemon } = location.state;
   const [enemyPokemonStats, setEnemyPokemonStats] = useState(null);
   const [ownPokemonStats, setOwnPokemonStats] = useState(null);
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     ownPokemon &&
@@ -26,6 +28,14 @@ function Battle() {
       });
   }, [enemyPokemon]);
 
+  function handleVictory() {
+    navigate("/won");
+  }
+
+  function handleDefeat() {
+    navigate("/lost");
+  }
+
   async function handleAttack() {
     const response = await fetch(`/pokemon/battle/attack`);
     const data = await response.json();
@@ -41,6 +51,11 @@ function Battle() {
       attack: data.own.attack,
     });
     showAttackNumber();
+    if (data.own.hp <= 0) {
+      handleDefeat();
+    } else if (data.enemy.hp <= 0) {
+      handleVictory();
+    }
   }
 
   function showAttackNumber() {

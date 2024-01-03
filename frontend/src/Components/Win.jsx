@@ -5,7 +5,7 @@ function Won({ goBack }) {
   return (
     <div className="card" style={{ backgroundImage: `url(${win})` }}>
       <h1>YOU WON!!!</h1>
-      <Link to={"/"}>
+      <Link to={"/map"}>
         <button className="pokemon-btn" onClick={goBack}>
           BACK
         </button>

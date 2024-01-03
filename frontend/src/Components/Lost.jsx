@@ -5,7 +5,7 @@ function Lost({ goBack }) {
   return (
     <div className="card" style={{ backgroundImage: `url(${lost})` }}>
       <h1>YOU LOST!!!</h1>
-      <Link to={"/"}>
+      <Link to={"/map"}>
         <button className="pokemon-btn" onClick={goBack}>
           BACK
         </button>
