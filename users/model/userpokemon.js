@@ -38,6 +38,15 @@ const LevelSchema = new Mongoose.Schema({
 });
 
 const PokemonSchema = new Mongoose.Schema({
+  uniqueId: {
+    type: Number,
+    unique: true,
+    required: true,
+  },
+  xp: {
+    type: Number,
+    default: 0,
+  },
   level: {
     type: Number,
     default: 0,

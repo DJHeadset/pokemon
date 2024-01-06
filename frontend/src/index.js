@@ -2,7 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./App.css";
-import EnemyPokemon from "./Components/EnemyPokemon";
 import Battle from "./Components/Battle";
 import Lost from "./Components/Lost";
 import Won from "./Components/Win";
@@ -31,10 +30,6 @@ const router = createBrowserRouter([
       {
         path: "/user",
         element: <User />,
-      },
-      {
-        path: "/enemy/:num",
-        element: <EnemyPokemon />,
       },
       {
         path: "/battle",

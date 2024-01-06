@@ -8,13 +8,13 @@ function Battle() {
   const [enemyPokemonStats, setEnemyPokemonStats] = useState(null);
   const [ownPokemonStats, setOwnPokemonStats] = useState(null);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     ownPokemon &&
       setOwnPokemonStats({
         hp: ownPokemon.stats[0].stat,
-        maxHp: ownPokemon.stats[6].base_stat,
+        maxHp: ownPokemon.stats[6].stat,
         attack: ownPokemon.attack,
       });
   }, [ownPokemon]);
@@ -22,17 +22,43 @@ function Battle() {
   useEffect(() => {
     enemyPokemon &&
       setEnemyPokemonStats({
-        hp: enemyPokemon.stats[0].stat,
+        hp: enemyPokemon.stats[6].stat,
         maxHp: enemyPokemon.stats[6].stat,
         attack: enemyPokemon.attack,
       });
   }, [enemyPokemon]);
 
-  function handleVictory() {
-    navigate("/won");
+  async function updateOwnPokemon() {
+    const hp = ownPokemonStats.hp - ownPokemonStats.attack;
+    ownPokemon.stats[0].stat = hp < 0 ? 0 : hp;
+    console.log(ownPokemon);
+    const response = await fetch("/api/auth/updateownpokemon", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "same-origin",
+      body: JSON.stringify({
+        ownPokemon,
+        enemyPokemon,
+      }),
+    });
+    const newOwnPokemon = await response.json();
+    return newOwnPokemon;
+  }
+
+  async function handleVictory() {
+    const newOwnPokemon = await updateOwnPokemon();
+    navigate("/won", {
+      state: {
+        ownPokemon: newOwnPokemon,
+        enemyPokemon: enemyPokemon,
+      },
+    });
   }
 
   function handleDefeat() {
+    updateOwnPokemon();
     navigate("/lost");
   }
 

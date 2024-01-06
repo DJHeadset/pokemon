@@ -27,6 +27,7 @@ exports.fetchPokemonData = async (pokemonId) => {
     stats.push({
       name: "maxHp",
       base_stat: pokemonData.stats[0].base_stat,
+      stat: pokemonData.stats[0].base_stat,
     });
 
     //creating types

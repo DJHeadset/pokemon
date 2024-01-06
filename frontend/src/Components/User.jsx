@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 import Loading from "./Loading/Loading";
 import { useNavigate } from "react-router-dom";
-import decoder from "./Decoder";
 import fetchUserData from "../service/userdata";
-//import fetchUserData from "../service/userdata";
 
 function User() {
   const [user, setUser] = useState(null);
@@ -50,6 +48,14 @@ function User() {
             <label>Experience: {user.experience}</label>
           </div>
           <div style={{ display: "flex", flexDirection: "column" }}>
+            {user.role === "admin" && (
+              <button
+                className="pokemon-btn"
+                onClick={() => navigate("/admin")}
+              >
+                ADMIN PAGE
+              </button>
+            )}
             <button className="pokemon-btn" onClick={() => handleLogout()}>
               Logout
             </button>
@@ -73,11 +79,10 @@ function User() {
                   <div className="Poke-Name">{pokemon.name}</div>
                   <div className="Poke-Stats">
                     <p>
-                      HP: {pokemon.stats[0].base_stat}/
-                      {pokemon.stats[6].base_stat}
+                      HP: {pokemon.stats[0].stat}/{pokemon.stats[6].stat}
                     </p>
-                    <p>Attack: {pokemon.stats[1].base_stat}</p>
-                    <p>Defense: {pokemon.stats[2].base_stat}</p>
+                    <p>Attack: {pokemon.stats[1].stat}</p>
+                    <p>Defense: {pokemon.stats[2].stat}</p>
                   </div>
                   <div className="pokemon-types">
                     {pokemon.types.map((type) => (

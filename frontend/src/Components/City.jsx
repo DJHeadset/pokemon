@@ -8,6 +8,7 @@ function City() {
   const [loading, setLoading] = useState(true);
   const [enemyPokemon, setEnemyPokemon] = useState(null);
   const [ownPokemon, setOwnPokemon] = useState([]);
+  const [sortCriteria, setSortCriteria] = useState("level");
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -32,6 +33,23 @@ function City() {
     }
     setLoading(false);
   };
+
+  const sortedPokemon = ownPokemon
+    .filter((own) => own.stats[0].stat > 0)
+    .sort((a, b) => {
+      switch (sortCriteria) {
+        case "name":
+          return a.name - b.name;
+        case "level":
+          return b.level - a.level;
+        case "hp":
+          return a.stats[0].stat - b.stats[0].stat;
+        case "attack":
+          return a.stats[1].stat - b.stats[1].stat;
+        default:
+          return 0;
+      }
+    });
 
   useEffect(() => {
     fetchCity(id).then((methods) => {
@@ -79,7 +97,13 @@ function City() {
         <div className="Own-Pokemon-Name">
           <label className="label">
             Choose your pokemon:
-            {ownPokemon.map((own) => (
+            <select onChange={(e) => setSortCriteria(e.target.value)}>
+              <option value="name">Sort by Name</option>
+              <option value="level">Sort by Level</option>
+              <option value="hp">Sort by HP</option>
+              <option value="attack">Sort by Attack</option>
+            </select>
+            {sortedPokemon.map((own) => (
               <button
                 onClick={() => {
                   navigate(`/battle`, {
@@ -95,8 +119,8 @@ function City() {
                   <div className="hp-bar-container">
                     <progress
                       className="hp-bar"
-                      value={own.hp}
-                      max={own.maxHp}
+                      value={own.stats[0].stat}
+                      max={own.stats[6].stat}
                     />
                   </div>
                   <img alt="Poke-Icon" src={own.sprites.front_default} />

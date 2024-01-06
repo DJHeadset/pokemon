@@ -1,4 +1,4 @@
-import decoder from "../Components/Decoder";
+import decoder from "./Decoder";
 
 export const fetchUserData = () => {
   const cookie = decoder();

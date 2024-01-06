@@ -2,7 +2,7 @@ import { Link, Outlet, useLocation } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 
 import "./Header.css";
-import decoder from "../Decoder";
+import decoder from "../../service/Decoder";
 
 function Header() {
   let page = useLocation();
@@ -23,8 +23,8 @@ function Header() {
   }
 
   const cookie = decoder();
-  if(cookie) {
-    user=cookie.username
+  if (cookie) {
+    user = cookie.username;
   }
   /* if (document.cookie) {
     const decodedCookie = jwtDecode(

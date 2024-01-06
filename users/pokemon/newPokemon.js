@@ -11,8 +11,13 @@ exports.newpokemon = async (req, res, next) => {
       if (err) {
         return res.status(401).json({ message: err });
       } else {
+        const userId = decodedToken.id;
+        const userDoc = await User.findById(userId);
+        const curentLength = userDoc.pokemons.length;
+        newPokemon.uniqueId = curentLength + 1;
+
         const response = await User.findByIdAndUpdate(
-          { _id: decodedToken.id },
+          { _id: userId },
           { $push: { pokemons: newPokemon } },
           { new: true }
         );

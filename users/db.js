@@ -1,5 +1,5 @@
 require("dotenv").config();
-const Mongoose = require("mongoose")
+const Mongoose = require("mongoose");
 const { MONGO_URL, PORT = 27017 } = process.env;
 
 if (!MONGO_URL) {
@@ -11,7 +11,7 @@ const connectDB = async () => {
   await Mongoose.connect(MONGO_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-  })
-  console.log("MongoDB Connected")
-}
-module.exports = connectDB
+  });
+  console.log("MongoDB Connected");
+};
+module.exports = connectDB;
