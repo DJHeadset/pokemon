@@ -11,7 +11,10 @@ const {
 } = require("./auth");
 const { adminAuth } = require("../middleware/auth");
 const { newpokemon } = require("../pokemon/newPokemon");
-const { updateOwnPokemon } = require("../pokemon/updatePokemon");
+const {
+  updateOwnPokemon,
+  pokmemonHospital,
+} = require("../pokemon/updatePokemon");
 
 router.route("/register").post(register);
 router.route("/login").post(login);
@@ -21,5 +24,6 @@ router.route("/getusers").get(getUsers);
 router.route("/getuser").get(getUser);
 router.route("/newpokemon").post(newpokemon);
 router.route("/updateownpokemon").post(updateOwnPokemon);
+router.route("/hospital").post(pokmemonHospital);
 router.route("/logout").get(logout);
 module.exports = router;

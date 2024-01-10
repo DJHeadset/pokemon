@@ -1,5 +1,5 @@
 import { Link, Outlet, useLocation } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
+import logo from "../../resources/pic/logo.png";
 
 import "./Header.css";
 import decoder from "../../service/Decoder";
@@ -26,19 +26,15 @@ function Header() {
   if (cookie) {
     user = cookie.username;
   }
-  /* if (document.cookie) {
-    const decodedCookie = jwtDecode(
-      document.cookie.substring(5, document.cookie.length)
-    );
-    user = decodedCookie.username;
-  } */
 
   return (
     <div className="Header">
       <nav>
         <ul>
           <li className="grow">
-            <Link to="/">HOME</Link>
+            <Link to="/">
+              <img src={logo} style={{ height: "32px" }} />
+            </Link>
           </li>
           <li className="grow location-title">{pageName}</li>
           <li>

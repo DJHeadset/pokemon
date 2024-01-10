@@ -52,6 +52,10 @@ function getPokemonByMethod(encounters, method) {
   return randomPokemons;
 }
 
+function getHospital() {
+  console.log("hospital");
+}
+
 function getWater(encounters) {
   const pokeSet = [];
   pokeSet.push(...getPokemonByMethod(encounters, "surf"));
@@ -135,7 +139,6 @@ function getRandomPokemon(pokeSet) {
   const eligiblePokemons = pokeSet.filter(
     (pokemon) => pokemon.chance >= random
   );
-
   if (eligiblePokemons.length > 0) {
     const lowestChance = Math.min(
       ...eligiblePokemons.map((pokemon) => pokemon.chance)
@@ -157,30 +160,34 @@ function getRandomPokemon(pokeSet) {
 exports.randomPokemon = async (req, res, next) => {
   const id = req.params.id;
   const method = req.params.method;
-  try {
-    const response = await fetch(
-      `https://pokeapi.co/api/v2/location-area/${id}`
-    );
-    const locationData = await response.json();
+  if (method === "Hospital") {
+    res.send({ message: "Hospital" });
+  } else {
+    try {
+      const response = await fetch(
+        `https://pokeapi.co/api/v2/location-area/${id}`
+      );
+      const locationData = await response.json();
 
-    const pokeSet = getPokemonSet(locationData.pokemon_encounters, method);
-    const sortedPokeSet = sortAndRemoveDuplicates(pokeSet);
-    const selectedPokemon = getRandomPokemon(sortedPokeSet);
-    if (selectedPokemon !== null) {
-      const response = await fetchPokemonData(selectedPokemon.id);
-      response.level = selectedPokemon.level;
-      response.unique = selectedPokemon.unique;
-      const levelledUpPokemon = calculateStats(response);
-      //console.log(levelledUpPokemon.unique)
-      res.send({
-        message: `A wild ${response.name} appeared`,
-        pokemon: levelledUpPokemon,
-      });
-    } else {
-      res.send({ message: "no pokemon found" });
+      const pokeSet = getPokemonSet(locationData.pokemon_encounters, method);
+      const sortedPokeSet = sortAndRemoveDuplicates(pokeSet);
+      const selectedPokemon = getRandomPokemon(sortedPokeSet);
+      if (selectedPokemon !== null) {
+        const response = await fetchPokemonData(selectedPokemon.id);
+        response.level = selectedPokemon.level;
+        response.unique = selectedPokemon.unique;
+        const levelledUpPokemon = calculateStats(response);
+        //console.log(levelledUpPokemon.unique)
+        res.send({
+          message: `A wild ${response.name} appeared`,
+          pokemon: levelledUpPokemon,
+        });
+      } else {
+        res.send({ message: "no pokemon found" });
+      }
+    } catch (error) {
+      console.error("Error fetching random Pokemon:", error);
+      res.status(500).json({ error: "Internal Server Error" });
     }
-  } catch (error) {
-    console.error("Error fetching random Pokemon:", error);
-    res.status(500).json({ error: "Internal Server Error" });
   }
 };

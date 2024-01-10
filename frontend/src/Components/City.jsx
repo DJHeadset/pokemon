@@ -15,19 +15,23 @@ function City() {
   const fetchCity = async (id) => {
     const response = await fetch(`/pokemon/city/${id}`);
     const cityData = await response.json();
+    console.log(cityData);
     return cityData;
   };
 
   const handleClick = async (method) => {
     setLoading(true);
-    //console.log(method);
+
     const response = await fetch(`/pokemon/randompokemon/${id}/${method}`);
     const data = await response.json();
+
     if (data.pokemon) {
       window.alert(data.message);
       setEnemyPokemon(data.pokemon);
       const user = await fetchUserData();
       setOwnPokemon(user.pokemons);
+    } else if (data.message === "Hospital") {
+      navigate("/hospital");
     } else {
       window.alert(data.message);
     }
@@ -35,7 +39,7 @@ function City() {
   };
 
   const sortedPokemon = ownPokemon
-    .filter((own) => own.stats[0].stat > 0)
+    .filter((own) => own.stats[0].stat > 0 && !own.hospital.inHospital)
     .sort((a, b) => {
       switch (sortCriteria) {
         case "name":

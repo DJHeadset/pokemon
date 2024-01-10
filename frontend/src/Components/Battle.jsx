@@ -15,7 +15,7 @@ function Battle() {
       setOwnPokemonStats({
         hp: ownPokemon.stats[0].stat,
         maxHp: ownPokemon.stats[6].stat,
-        attack: ownPokemon.attack,
+        attack: ownPokemon.attack ? ownPokemon.attack : 0,
       });
   }, [ownPokemon]);
 
@@ -28,10 +28,9 @@ function Battle() {
       });
   }, [enemyPokemon]);
 
-  async function updateOwnPokemon() {
-    const hp = ownPokemonStats.hp - ownPokemonStats.attack;
+  async function updateOwnPokemon(data) {
+    const hp = data.own.hp - data.own.attack;
     ownPokemon.stats[0].stat = hp < 0 ? 0 : hp;
-    console.log(ownPokemon);
     const response = await fetch("/api/auth/updateownpokemon", {
       method: "POST",
       headers: {
@@ -47,8 +46,8 @@ function Battle() {
     return newOwnPokemon;
   }
 
-  async function handleVictory() {
-    const newOwnPokemon = await updateOwnPokemon();
+  async function handleVictory(data) {
+    const newOwnPokemon = await updateOwnPokemon(data);
     navigate("/won", {
       state: {
         ownPokemon: newOwnPokemon,
@@ -57,8 +56,8 @@ function Battle() {
     });
   }
 
-  function handleDefeat() {
-    updateOwnPokemon();
+  function handleDefeat(data) {
+    updateOwnPokemon(data);
     navigate("/lost");
   }
 
@@ -78,9 +77,9 @@ function Battle() {
     });
     showAttackNumber();
     if (data.own.hp <= 0) {
-      handleDefeat();
+      handleDefeat(data);
     } else if (data.enemy.hp <= 0) {
-      handleVictory();
+      handleVictory(data);
     }
   }
 

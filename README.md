@@ -27,7 +27,6 @@ The application adopts a microservices architecture, with distinct backends mana
 ![Detiled view of chozen and enemy pokemon with a big "ATTACK" button](./frontend/src/resources/readmePics/battle.jpg)
 
 ### Future Roadmap
-- **Leveling System:** Implementing a leveling system to enhance the gaming experience.
 - **Battle Rework:** Improving and refining the battle mechanics.
 - **Player vs. Player (PvP):** Introducing the ability for players to battle each other.
 - **Tournaments:** Setting the stage for epic Pokémon tournaments.

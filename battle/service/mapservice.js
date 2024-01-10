@@ -122,5 +122,11 @@ exports.city = async (req, res, next) => {
     encounters: uniqueEncounterMethods(formattedAreaData),
   };
 
+  const populatedLocations = ["city", "town", "island"];
+
+  if (populatedLocations.some((location) => data.name.includes(location))) {
+    data.encounters.push("Hospital");
+  }
+
   res.send(data);
 };

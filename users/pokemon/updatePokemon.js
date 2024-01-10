@@ -39,12 +39,28 @@ exports.updateOwnPokemon = async (req, res, next) => {
           XP = Math.floor((enemy.base_experience * enemy.level) / 7);
           own.xp += XP;
           updateEv(own, enemy);
-          own = calculateStats(own)
+          own = calculateStats(own);
         } else {
           console.log("you lost");
         }
         savePokemon(decodedToken, own);
         res.json(own);
+      }
+    });
+  }
+};
+
+exports.pokmemonHospital = async (req, res, next) => {
+  const data = req.body;
+  const user = req.headers.cookie.substring(5, req.headers.cookie.length);
+
+  if (user) {
+    jwt.verify(user, jwtSecret, async (err, decodedToken) => {
+      if (err) {
+        return res.status(401).json({ message: err });
+      } else {
+        savePokemon(decodedToken, data);
+        res.json(data);
       }
     });
   }

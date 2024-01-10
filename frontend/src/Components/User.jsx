@@ -78,8 +78,12 @@ function User() {
                   <img alt="poke-Icon" src={pokemon.sprites.front_default} />
                   <div className="Poke-Name">{pokemon.name}</div>
                   <div className="Poke-Stats">
+                    <p>Level: {pokemon.level}</p>
                     <p>
-                      HP: {pokemon.stats[0].stat}/{pokemon.stats[6].stat}
+                      HP:{" "}
+                      {pokemon.hospital.inHospital
+                        ? "In hospital"
+                        : `${pokemon.stats[0].stat}/${pokemon.stats[6].stat}`}
                     </p>
                     <p>Attack: {pokemon.stats[1].stat}</p>
                     <p>Defense: {pokemon.stats[2].stat}</p>

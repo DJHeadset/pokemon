@@ -38,6 +38,10 @@ exports.fetchPokemonData = async (pokemonId) => {
     const pokemonEntry = {
       name: pokemonData.name,
       pokeId: speciesData.id.toString(),
+      hospital: {
+        inHospital: false,
+        startTime: Date.now(),
+      },
       species: speciesData.name,
       base_experience: pokemonData.base_experience,
       sprites: {

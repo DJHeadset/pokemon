@@ -28,10 +28,8 @@ function handleAttack() {
   const attack = Math.floor(
     ((((2 / 5 + 2) * att * 60) / def / 50 + 2) * rnd) / 255
   );
-
   enemyPokemonStats.hp = hp - attack;
   enemyPokemonStats.attack = attack;
-  handleAttackBack();
 }
 
 function handleAttackBack() {
@@ -61,6 +59,7 @@ exports.attack = (req, res, next) => {
   //console.log(type)
   if (type === "attack") {
     handleAttack();
+    handleAttackBack();
     let response = {
       enemy: {
         hp: enemyPokemonStats.hp,

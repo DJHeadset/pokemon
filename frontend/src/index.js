@@ -13,6 +13,7 @@ import PokemonData from "./Components/Pokemondata";
 import StarterPack from "./Components/StarterPack";
 import Map from "./Components/Map";
 import City from "./Components/City";
+import Hospital from "./Components/Hospital";
 
 const router = createBrowserRouter([
   {
@@ -58,6 +59,10 @@ const router = createBrowserRouter([
       {
         path: "/city/:id",
         element: <City />,
+      },
+      {
+        path: "/hospital",
+        element: <Hospital />,
       },
     ],
   },

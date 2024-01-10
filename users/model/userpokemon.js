@@ -63,6 +63,15 @@ const PokemonSchema = new Mongoose.Schema({
     type: String,
     required: true,
   },
+  hospital: {
+    inHospital: {
+      type: Boolean,
+      default: false,
+    },
+    startTime: {
+      type: Date,
+    },
+  },
   species: {
     type: String,
     required: true,
