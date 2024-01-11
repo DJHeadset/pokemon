@@ -1,3 +1,5 @@
+const fetch = require("node-fetch")
+
 exports.fetchPokemonData = async (pokemonId) => {
   try {
     // Fetch data for the main Pokémon

@@ -1,3 +1,5 @@
+const fetch = require("node-fetch")
+
 const { calculateStats } = require("./calculatestats");
 const { fetchPokemonData } = require("./fetchpokemondata");
 

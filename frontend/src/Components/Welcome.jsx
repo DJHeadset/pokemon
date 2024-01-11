@@ -1,7 +1,7 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../Welcome.css";
 import decoder from "../service/Decoder";
-import { useNavigate } from "react-router-dom";
 
 function Welcome() {
   const [registerUserName, setRegisterUserName] = useState("");
