@@ -62,7 +62,12 @@ function Map() {
       <div>
         <h2 style={{ display: "flex", justifyContent: "space-between" }}>
           Cities in {selectedRegion.name}
-          <button onClick={() => setSelectedRegion(null)}>BACK</button>
+          <button
+            className="pokemon-btn"
+            onClick={() => setSelectedRegion(null)}
+          >
+            BACK
+          </button>
         </h2>
         <div className="location-name">
           {selectedRegion.locations.map((city, i) => (
@@ -78,7 +83,9 @@ function Map() {
       <div>
         <h2 style={{ display: "flex", justifyContent: "space-between" }}>
           Areas in {areas.name}
-          <button onClick={() => setAreas(null)}>BACK</button>
+          <button className="pokemon-btn" onClick={() => setAreas(null)}>
+            BACK
+          </button>
         </h2>
         <div className="location-name">
           {areas.areas.map((area, i) => (

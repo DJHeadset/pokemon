@@ -305,7 +305,7 @@ body {
 .pokemon-btn {
   border-radius: 10px;
   cursor: pointer;
-  flex-basis: 48%;
+  flex-basis: 25%;
   padding: 20px;
   transition: box-shadow 0.3s ease;
   font-size: 24px;

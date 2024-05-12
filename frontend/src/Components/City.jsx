@@ -67,9 +67,13 @@ function City() {
   } else if (!enemyPokemon) {
     return (
       <>
-        <div>{methods.name}</div>
+        <h2>{methods.name}</h2>
         {methods.encounters.map((method, index) => (
-          <button key={index} onClick={() => handleClick(method)}>
+          <button
+            className="pokemon-btn"
+            key={index}
+            onClick={() => handleClick(method)}
+          >
             {method}
           </button>
         ))}
@@ -97,7 +101,9 @@ function City() {
             ))}
           </div>
         </div>
-        <button onClick={() => setEnemyPokemon(null)}>BACK</button>
+        <button className="pokemon-btn" onClick={() => setEnemyPokemon(null)}>
+          BACK
+        </button>
         <div className="Own-Pokemon-Name">
           <label className="label">
             Choose your pokemon:
