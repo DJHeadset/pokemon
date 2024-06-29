@@ -2,11 +2,11 @@ name: Users Docker Image CI
 
 on:
   push:
-    branches: ["main"]
-    paths: ["users/**"]
+    branches: ["oneBackend"]
+    paths: ["backend/**"]
 
 env:
-  DOCKER_IMAGE_USERS: "djheadset/pokemon_users:latest"
+  DOCKER_IMAGE_USERS: "djheadset/pokemon_backend:latest"
 
 jobs:
   docker:
@@ -26,6 +26,6 @@ jobs:
       - name: Users build and push
         uses: docker/build-push-action@v5
         with:
-          context: ./users
+          context: ./backend
           push: true
-          tags: ${{ env.DOCKER_IMAGE_USERS }}
+          tags: ${{ env.DOCKER_IMAGE_BACKEND }}

@@ -79,7 +79,7 @@ function Welcome() {
         const cookie = decoder();
         redirect(cookie.role);
       } else {
-        res.json().then((data) => window.alert(data.error));
+        res.json().then((data) => window.alert(data.message));
       }
     });
   };

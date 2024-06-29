@@ -83,10 +83,10 @@ function User() {
                       HP:{" "}
                       {pokemon.hospital.inHospital
                         ? "In hospital"
-                        : `${pokemon.stats[0].stat}/${pokemon.stats[6].stat}`}
+                        : pokemon.stats.hp}
                     </p>
-                    <p>Attack: {pokemon.stats[1].stat}</p>
-                    <p>Defense: {pokemon.stats[2].stat}</p>
+                    <p>Attack: {pokemon.stats.attack}</p>
+                    <p>Defense: {pokemon.stats.defense}</p>
                   </div>
                   <div className="pokemon-types">
                     {pokemon.types.map((type) => (

@@ -51,7 +51,6 @@ function Admin() {
       .then((res) => res.json())
       .then((data) => {
         setUsers(data.user);
-        console.log(users);
       });
   };
 
@@ -76,7 +75,11 @@ function Admin() {
                 <td>{user.username}</td>
                 <td>{user.role}</td>
                 <td>
-                  <button onClick={() => onUpgrade(user.id)}>UPGRADE</button>
+                  {user.role !== "admin" ? (
+                    <button onClick={() => onUpgrade(user.id)}>UPGRADE</button>
+                  ) : (
+                    <div style={{ textAlign: "center" }}>ADMIN</div>
+                  )}
                 </td>
                 <td>
                   <button onClick={() => onDelete(user.id)}>DELETE</button>
