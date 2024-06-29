@@ -1,4 +1,4 @@
-name: Users Docker Image CI
+name: Backend Docker Image CI
 
 on:
   push:
