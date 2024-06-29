@@ -215,25 +215,24 @@ exports.getUser = async (req, res, next) => {
         if (!user) {
           return res.status(404).json({ message: "User not found" });
         }
+        console.log(user)
         // Extract only the desired attributes from the Pokemon objects
         const userResponse = {
+          userId: user._id,
           username: user.username,
           gold: user.gold,
           experience: user.experience,
           role: user.role,
 
           pokemons: user.pokemons.map((pokemon) => ({
-            id: pokemon._id,
+            uniqueId: pokemon.uniqueId,
             sprites: pokemon.sprites,
             name: pokemon.name,
             level: pokemon.level,
             hospital: pokemon.hospital,
-            stats: {
-              hp: `${pokemon.stats[0].stat}/${pokemon.stats[6].stat}`,
-              attack: pokemon.stats[1].stat,
-              defense: pokemon.stats[2].stat,
-            },
+            stats: [...pokemon.stats],
             types: pokemon.types,
+            xp: pokemon.xp,
           })),
         };
         res.status(200).json(userResponse);

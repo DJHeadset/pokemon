@@ -83,7 +83,7 @@ function User() {
                       HP:{" "}
                       {pokemon.hospital.inHospital
                         ? "In hospital"
-                        : pokemon.stats.hp}
+                        : `${pokemon.stats[0].stat}/${pokemon.stats[6].stat}`}
                     </p>
                     <p>Attack: {pokemon.stats.attack}</p>
                     <p>Defense: {pokemon.stats.defense}</p>
