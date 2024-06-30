@@ -6,7 +6,7 @@ on:
     paths: ["backend/**"]
 
 env:
-  DOCKER_IMAGE_USERS: "djheadset/pokemon_backend:latest"
+  DOCKER_IMAGE_BACKEND: "djheadset/pokemon_backend:latest"
 
 jobs:
   docker:
@@ -23,7 +23,7 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-      - name: Users build and push
+      - name: Backend build and push
         uses: docker/build-push-action@v5
         with:
           context: ./backend

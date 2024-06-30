@@ -64,7 +64,7 @@ function Battle() {
   async function handleAttack() {
     const response = await fetch(`/pokemon/battle/attack`);
     const data = await response.json();
-    console.log(data);
+    //console.log(data);
     setEnemyPokemonStats({
       ...enemyPokemonStats,
       hp: data.enemy.hp,
@@ -95,8 +95,6 @@ function Battle() {
   }
 
   const setupBattle = async () => {
-    console.log(enemyPokemon);
-
     const response = await fetch(`/pokemon/battle/battlesetup`, {
       method: "POST",
       headers: {

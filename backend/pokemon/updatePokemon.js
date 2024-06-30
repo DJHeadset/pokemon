@@ -25,7 +25,7 @@ async function savePokemon(userId, own) {
           "pokemons.$.level": own.level,
           "pokemons.$.hospital": own.hospital,
           "pokemons.$.stats": own.stats,
-          "pokemons.$.xp": own.xp
+          "pokemons.$.xp": own.xp,
         },
       },
       { new: true }
@@ -54,13 +54,10 @@ exports.updateOwnPokemon = async (req, res, next) => {
         return res.status(401).json({ message: err });
       } else {
         if (own.stats[0].stat > 0) {
-          console.log("you won");
           XP = Math.floor((enemy.base_experience * enemy.level) / 7);
           own.xp += XP;
           updateEv(own, enemy);
           own = calculateStats(own);
-        } else {
-          console.log("you lost");
         }
         savePokemon(decodedToken.id, own);
         res.json(own);

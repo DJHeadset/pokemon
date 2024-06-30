@@ -1,7 +1,7 @@
 function calculateLevel(pokemon) {
   for (let i = 0; i < pokemon.levels.length; i++) {
     if (pokemon.xp < pokemon.levels[i].experience) {
-      console.log(pokemon.levels[i - 1].level);
+      //console.log(pokemon.levels[i - 1].level);
       return pokemon.levels[i - 1].level;
     }
   }
@@ -26,8 +26,6 @@ exports.calculateStats = (pokemon) => {
         baseStat + level * 0.045 + (EV / 4) * (level * 0.01)
       );
     }
-  } else {
-    console.log("level 0 pokemon");
   }
 
   if (pokemon.level !== currentLevel) {

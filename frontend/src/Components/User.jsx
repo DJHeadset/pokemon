@@ -1,13 +1,11 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Loading from "./Loading/Loading";
 import { useNavigate } from "react-router-dom";
-import fetchUserData from "../service/userdata";
+import useUserData from "../hooks/useUserData";
 
 function User() {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const { user, loading } = useUserData();
   const [pokeActive, setPokeActive] = useState(false);
-
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -15,33 +13,12 @@ function User() {
     navigate("/");
   };
 
-  const getUserData = async () => {
-    const cookie = await fetchUserData();
-    if (cookie === null) {
-      window.alert("user is not logged in");
-      navigate("/");
-    } else {
-      setLoading(false);
-      setUser(cookie);
-    }
-  };
-
-  useEffect(() => {
-    getUserData();
-  }, []);
-
   if (loading) {
     return <Loading />;
   } else if (user) {
     return (
       <>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
-          }}
-        >
+        <div className="header-buttons">
           <div style={{ display: "flex", flexDirection: "column" }}>
             <label>Username: {user.username}</label>
             <label>Gold: {user.gold}</label>
@@ -56,7 +33,7 @@ function User() {
                 ADMIN PAGE
               </button>
             )}
-            <button className="pokemon-btn" onClick={() => handleLogout()}>
+            <button className="pokemon-btn" onClick={handleLogout}>
               Logout
             </button>
             <button className="pokemon-btn" onClick={() => navigate("/map")}>
@@ -74,7 +51,11 @@ function User() {
           {pokeActive ? (
             <div style={{ display: "flex", flexWrap: "wrap", margin: "2em" }}>
               {user.pokemons.map((pokemon) => (
-                <div className="cards" key={pokemon.id} id={pokemon.id}>
+                <div
+                  className="cards"
+                  key={pokemon.uniqueId}
+                  id={pokemon.uniqueId}
+                >
                   <img alt="poke-Icon" src={pokemon.sprites.front_default} />
                   <div className="Poke-Name">{pokemon.name}</div>
                   <div className="Poke-Stats">
@@ -107,9 +88,7 @@ function User() {
                 </div>
               ))}
             </div>
-          ) : (
-            ""
-          )}
+          ) : null}
         </div>
       </>
     );

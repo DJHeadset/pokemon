@@ -215,7 +215,6 @@ exports.getUser = async (req, res, next) => {
         if (!user) {
           return res.status(404).json({ message: "User not found" });
         }
-        console.log(user)
         // Extract only the desired attributes from the Pokemon objects
         const userResponse = {
           userId: user._id,

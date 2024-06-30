@@ -1,28 +1,26 @@
 .Header nav ul {
-    margin: 0;
-    list-style-type: none;
-    display: flex;
-    align-items: center;
-    padding: 20px;
-    background-color: #ffcc00;
-    border-radius: 10px;
-    color: white;
-    font-size: 32px;
-    font-weight: bold;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
-  }
-  
-  .Header nav button {
-    padding: 0.7rem 1.7rem;
-    font-weight: bold;
-  }
-  
-  .Header nav button:hover {
-    box-shadow: 0px 0px 5px rgb(255, 255, 255);
-  }
+  margin: 0;
+  list-style-type: none;
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  background-color: #ffcc00;
+  border-radius: 10px;
+  color: white;
+  font-size: 32px;
+  font-weight: bold;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+}
 
-  
+.Header nav button {
+  padding: 0.7rem 1.7rem;
+  font-weight: bold;
+}
+
+.Header nav button:hover {
+  box-shadow: 0px 0px 5px rgb(255, 255, 255);
+}
+
 .location-title {
-    text-shadow: 1px 1px 2px #444;
-  }
-  
+  text-shadow: 1px 1px 2px #444;
+}

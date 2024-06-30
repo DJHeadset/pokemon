@@ -56,7 +56,6 @@ exports.battleSetup = (req, res, next) => {
 
 exports.attack = (req, res, next) => {
   const type = req.params.type;
-  //console.log(type)
   if (type === "attack") {
     handleAttack();
     handleAttackBack();
