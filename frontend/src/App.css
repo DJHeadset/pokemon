@@ -305,7 +305,7 @@ body {
 .pokemon-btn {
   border-radius: 10px;
   cursor: pointer;
-  flex-basis: 25%;
+  /*flex-basis: 25%;*/
   padding: 20px;
   transition: box-shadow 0.3s ease;
   font-size: 24px;
@@ -317,6 +317,18 @@ body {
 .pokemon-btn:active {
   transform: scale(0.95);
   box-shadow: 0px 0px 10px #ffcb05;
+}
+
+.header-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.pokemon-container {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 2em;
 }
 
 h1 {

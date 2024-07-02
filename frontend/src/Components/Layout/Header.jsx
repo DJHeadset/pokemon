@@ -1,6 +1,5 @@
 import { Link, Outlet, useLocation } from "react-router-dom";
 import logo from "../../resources/pic/logo.png";
-
 import "./Header.css";
 import decoder from "../../service/Decoder";
 
@@ -33,7 +32,7 @@ function Header() {
         <ul>
           <li className="grow">
             <Link to="/">
-              <img src={logo} style={{ height: "32px" }} />
+              <img src={logo} alt="Logo" style={{ height: "32px" }} />
             </Link>
           </li>
           <li className="grow location-title">{pageName}</li>

@@ -14,6 +14,7 @@ exports.calculateStats = (pokemon) => {
   const currentHp = pokemon.stats[0].stat;
 
   if (xp > 0) {
+    console.log("Calculating level...");
     level = calculateLevel(pokemon);
     pokemon.level = level;
   }
@@ -26,8 +27,6 @@ exports.calculateStats = (pokemon) => {
         baseStat + level * 0.045 + (EV / 4) * (level * 0.01)
       );
     }
-  } else {
-    console.log("level 0 pokemon");
   }
 
   if (pokemon.level !== currentLevel) {

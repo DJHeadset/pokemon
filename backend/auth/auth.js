@@ -188,14 +188,14 @@ exports.deleteUser = async (req, res, next) => {
 exports.getUsers = async (req, res, next) => {
   await User.find({})
     .then((users) => {
-      const userFunction = users.map((user) => {
+      const userResponse = users.map((user) => {
         const container = {};
         container.id = user._id;
         container.username = user.username;
         container.role = user.role;
         return container;
       });
-      res.status(200).json({ user: userFunction });
+      res.status(200).json({ user: userResponse });
     })
     .catch((err) =>
       res.status(401).json({ message: "Not successful", error: err.message })
@@ -209,9 +209,32 @@ exports.getUser = async (req, res, next) => {
       if (err) {
         return res.status(401).json({ message: "Not authorized", valami: err });
       } else {
-        await User.findById(decodedToken.id).then((user) => {
-          res.status(200).json(user);
-        });
+        const user = await User.findById(decodedToken.id).select(
+          "username gold experience role pokemons"
+        );
+        if (!user) {
+          return res.status(404).json({ message: "User not found" });
+        }
+        // Extract only the desired attributes from the Pokemon objects
+        const userResponse = {
+          userId: user._id,
+          username: user.username,
+          gold: user.gold,
+          experience: user.experience,
+          role: user.role,
+
+          pokemons: user.pokemons.map((pokemon) => ({
+            uniqueId: pokemon.uniqueId,
+            sprites: pokemon.sprites,
+            name: pokemon.name,
+            level: pokemon.level,
+            hospital: pokemon.hospital,
+            stats: [...pokemon.stats],
+            types: pokemon.types,
+            xp: pokemon.xp,
+          })),
+        };
+        res.status(200).json(userResponse);
       }
     });
   }

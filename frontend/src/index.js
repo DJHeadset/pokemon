@@ -4,7 +4,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./App.css";
 import Battle from "./Components/Battle";
 import Lost from "./Components/Lost";
-import Won from "./Components/Win";
+import Win from "./Components/Win";
 import Header from "./Components/Layout/Header";
 import Welcome from "./Components/Welcome";
 import Admin from "./Components/Admin";
@@ -42,7 +42,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/won",
-        element: <Won />,
+        element: <Win />,
       },
       {
         path: "/data",

@@ -1,26 +1,26 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Loading from "./Loading/Loading";
-import fetchUserData from "../service/userdata";
+import useUserData from "../hooks/useUserData";
 
 function City() {
   const [methods, setMethods] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loadingCity, setLoadingCity] = useState(true);
   const [enemyPokemon, setEnemyPokemon] = useState(null);
-  const [ownPokemon, setOwnPokemon] = useState([]);
   const [sortCriteria, setSortCriteria] = useState("level");
+  const { user, loading: loadingUser, fetchUserData } = useUserData();
   const { id } = useParams();
   const navigate = useNavigate();
 
   const fetchCity = async (id) => {
     const response = await fetch(`/pokemon/city/${id}`);
     const cityData = await response.json();
-    console.log(cityData);
+    //console.log(cityData);
     return cityData;
   };
 
   const handleClick = async (method) => {
-    setLoading(true);
+    setLoadingCity(true);
 
     const response = await fetch(`/pokemon/randompokemon/${id}/${method}`);
     const data = await response.json();
@@ -28,18 +28,17 @@ function City() {
     if (data.pokemon) {
       window.alert(data.message);
       setEnemyPokemon(data.pokemon);
-      const user = await fetchUserData();
-      setOwnPokemon(user.pokemons);
+      await fetchUserData();
     } else if (data.message === "Hospital") {
       navigate("/hospital");
     } else {
       window.alert(data.message);
     }
-    setLoading(false);
+    setLoadingCity(false);
   };
 
-  const sortedPokemon = ownPokemon
-    .filter((own) => own.stats[0].stat > 0 && !own.hospital.inHospital)
+  const sortedPokemon = user?.pokemons
+    ?.filter((own) => own.stats[0].stat > 0 && !own.hospital.inHospital)
     .sort((a, b) => {
       switch (sortCriteria) {
         case "name":
@@ -57,12 +56,12 @@ function City() {
 
   useEffect(() => {
     fetchCity(id).then((methods) => {
-      setLoading(false);
       setMethods(methods);
+      setLoadingCity(false);
     });
-  }, []);
+  }, [id]);
 
-  if (loading) {
+  if (loadingUser || loadingCity) {
     return <Loading />;
   } else if (!enemyPokemon) {
     return (
@@ -113,8 +112,9 @@ function City() {
               <option value="hp">Sort by HP</option>
               <option value="attack">Sort by Attack</option>
             </select>
-            {sortedPokemon.map((own) => (
+            {sortedPokemon?.map((own) => (
               <button
+                key={own.uniqueId}
                 onClick={() => {
                   navigate(`/battle`, {
                     state: {
@@ -134,6 +134,16 @@ function City() {
                     />
                   </div>
                   <img alt="Poke-Icon" src={own.sprites.front_default} />
+                  <div className="pokemon-types">
+                    {own.types.map((type) => (
+                      <span
+                        key={type.name}
+                        className={`pokemon-type ${type.name}`}
+                      >
+                        {type.name}
+                      </span>
+                    ))}
+                  </div>
                 </div>
 
                 <div className="poke-info">
