@@ -61,23 +61,12 @@ node start
 ```
 
 In a different terminal:
-1. Enter the user folder
+1. Enter the backend folder
 2. Install dependencies
-3. Start backend #1
+3. Start backend
 
 ```
-cd user
-npm i
-npm run dev
-```
-
-In a different terminal:
-1. Enter the battle folder
-2. Install dependencies
-3. Start backend #2
-
-```
-cd battle
+cd backend
 npm i
 npm run dev
 ```

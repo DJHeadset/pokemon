@@ -2,7 +2,7 @@ name: Backend Docker Image CI
 
 on:
   push:
-    branches: ["oneBackend"]
+    branches: ["main"]
     paths: ["backend/**"]
 
 env:
