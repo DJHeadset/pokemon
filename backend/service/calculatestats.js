@@ -1,7 +1,7 @@
 function calculateLevel(pokemon) {
   for (let i = 0; i < pokemon.levels.length; i++) {
     if (pokemon.xp < pokemon.levels[i].experience) {
-      //console.log(pokemon.levels[i - 1].level);
+      console.log(pokemon.levels[i - 1].level);
       return pokemon.levels[i - 1].level;
     }
   }
@@ -14,6 +14,7 @@ exports.calculateStats = (pokemon) => {
   const currentHp = pokemon.stats[0].stat;
 
   if (xp > 0) {
+    console.log("Calculating level...");
     level = calculateLevel(pokemon);
     pokemon.level = level;
   }

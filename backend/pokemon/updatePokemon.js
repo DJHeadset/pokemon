@@ -44,6 +44,7 @@ async function savePokemon(userId, own) {
 
 exports.updateOwnPokemon = async (req, res, next) => {
   const data = req.body;
+
   let own = data.ownPokemon;
   let enemy = data.enemyPokemon;
   const user = req.headers.cookie.substring(5, req.headers.cookie.length);
@@ -53,6 +54,8 @@ exports.updateOwnPokemon = async (req, res, next) => {
       if (err) {
         return res.status(401).json({ message: err });
       } else {
+        const temp = await User.findById(decodedToken.id).select("pokemons");
+        own.levels = temp.pokemons[own.uniqueId - 1].levels;
         if (own.stats[0].stat > 0) {
           XP = Math.floor((enemy.base_experience * enemy.level) / 7);
           own.xp += XP;

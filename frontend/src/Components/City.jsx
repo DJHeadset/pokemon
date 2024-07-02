@@ -8,7 +8,7 @@ function City() {
   const [loadingCity, setLoadingCity] = useState(true);
   const [enemyPokemon, setEnemyPokemon] = useState(null);
   const [sortCriteria, setSortCriteria] = useState("level");
-  const { user, loading: loadingUser, setUser, fetchUserData } = useUserData();
+  const { user, loading: loadingUser, fetchUserData } = useUserData();
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -134,7 +134,18 @@ function City() {
                     />
                   </div>
                   <img alt="Poke-Icon" src={own.sprites.front_default} />
+                  <div className="pokemon-types">
+                    {own.types.map((type) => (
+                      <span
+                        key={type.name}
+                        className={`pokemon-type ${type.name}`}
+                      >
+                        {type.name}
+                      </span>
+                    ))}
+                  </div>
                 </div>
+
                 <div className="poke-info">
                   <p>Level: {own.level}</p>
                   <p>{own.name}</p>

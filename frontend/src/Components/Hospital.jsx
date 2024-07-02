@@ -5,7 +5,7 @@ import Loading from "./Loading/Loading";
 import "../App.css";
 
 function Hospital() {
-  const { user, loading, getUserData } = useUserData();
+  const { user, loading, fetchUserData } = useUserData();
   const [reloadCounter, setReloadCounter] = useState(0);
   const navigate = useNavigate();
 
@@ -56,8 +56,8 @@ function Hospital() {
   }
 
   useEffect(() => {
-    getUserData();
-  }, [getUserData, reloadCounter]);
+    fetchUserData();
+  }, [fetchUserData, reloadCounter]);
 
   if (loading) {
     return <Loading />;
