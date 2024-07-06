@@ -14,6 +14,7 @@ import StarterPack from "./Components/StarterPack";
 import Map from "./Components/Map";
 import City from "./Components/City";
 import Hospital from "./Components/Hospital";
+import Details from "./Components/Details";
 
 const router = createBrowserRouter([
   {
@@ -63,6 +64,10 @@ const router = createBrowserRouter([
       {
         path: "/hospital",
         element: <Hospital />,
+      },
+      {
+        path: "/details/:id",
+        element: <Details />,
       },
     ],
   },

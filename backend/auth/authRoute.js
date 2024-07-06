@@ -7,6 +7,7 @@ const {
   deleteUser,
   getUsers,
   getUser,
+  getPokemon,
   logout,
 } = require("./auth");
 const { adminAuth } = require("../middleware/auth");
@@ -22,6 +23,7 @@ router.route("/update").put(adminAuth, update);
 router.route("/deleteUser").delete(adminAuth, deleteUser);
 router.route("/getusers").get(getUsers);
 router.route("/getuser").get(getUser);
+router.route("/getpokemon/:id").get(getPokemon);
 router.route("/newpokemon").post(newpokemon);
 router.route("/updateownpokemon").post(updateOwnPokemon);
 router.route("/hospital").post(pokmemonHospital);

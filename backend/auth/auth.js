@@ -4,6 +4,27 @@ const User = require("../model/user");
 const bcrypt = require("bcryptjs");
 const { jwtSecret } = process.env;
 
+async function getUserFromToken(token) {
+  return new Promise((resolve, reject) => {
+    jwt.verify(token, jwtSecret, async (err, decodedToken) => {
+      if (err) {
+        return reject({ status: 401, message: "Not authorized" });
+      } else {
+        try {
+          const user = await User.findById(decodedToken.id);
+          if (!user) {
+            return reject({ status: 404, message: "User not found" });
+          } else {
+            resolve(user);
+          }
+        } catch (error) {
+          reject({ status: 500, message: error.message });
+        }
+      }
+    });
+  });
+}
+
 async function sameUsername(name) {
   try {
     const users = await User.find({});
@@ -205,38 +226,36 @@ exports.getUsers = async (req, res, next) => {
 exports.getUser = async (req, res, next) => {
   const token = req.headers.cookie.substring(5, req.headers.cookie.length);
   if (token) {
-    jwt.verify(token, jwtSecret, async (err, decodedToken) => {
-      if (err) {
-        return res.status(401).json({ message: "Not authorized", valami: err });
-      } else {
-        const user = await User.findById(decodedToken.id).select(
-          "username gold experience role pokemons"
-        );
-        if (!user) {
-          return res.status(404).json({ message: "User not found" });
-        }
-        // Extract only the desired attributes from the Pokemon objects
-        const userResponse = {
-          userId: user._id,
-          username: user.username,
-          gold: user.gold,
-          experience: user.experience,
-          role: user.role,
+    const user = await getUserFromToken(token);
+    const userResponse = {
+      userId: user._id,
+      username: user.username,
+      gold: user.gold,
+      experience: user.experience,
+      role: user.role,
 
-          pokemons: user.pokemons.map((pokemon) => ({
-            uniqueId: pokemon.uniqueId,
-            sprites: pokemon.sprites,
-            name: pokemon.name,
-            level: pokemon.level,
-            hospital: pokemon.hospital,
-            stats: [...pokemon.stats],
-            types: pokemon.types,
-            xp: pokemon.xp,
-          })),
-        };
-        res.status(200).json(userResponse);
-      }
-    });
+      pokemons: user.pokemons.map((pokemon) => ({
+        uniqueId: pokemon.uniqueId,
+        sprites: pokemon.sprites,
+        name: pokemon.name,
+        level: pokemon.level,
+        hospital: pokemon.hospital,
+        stats: [...pokemon.stats],
+        types: pokemon.types,
+        xp: pokemon.xp,
+      })),
+    };
+    res.status(200).json(userResponse);
+  }
+};
+
+exports.getPokemon = async (req, res, next) => {
+  const token = req.headers.cookie.substring(5, req.headers.cookie.length);
+  const id = req.params.id;
+  if (token) {
+    const user = await getUserFromToken(token);
+    const pokemon = user.pokemons[id - 1];
+    res.status(200).json(pokemon);
   }
 };
 

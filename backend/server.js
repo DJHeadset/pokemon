@@ -15,7 +15,7 @@ connectDB();
 app.use(cookieParser());
 app.use(express.json());
 app.use("/api/auth", require("./auth/authRoute"));
-app.use("/pokemon", require("./route"));
+app.use("/pokemon", require("./pokemon/pokeRoute"));
 
 // Handling Error
 process.on("unhandledRejection", (err) => {
