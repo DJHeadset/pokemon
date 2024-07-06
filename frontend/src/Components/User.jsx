@@ -62,7 +62,13 @@ function User() {
                       </div>
                       <button
                         className="pokemon-btn"
-                        onClick={() => navigate(`/details/${pokemon.uniqueId}`)}
+                        onClick={() =>
+                          navigate(`/details/${pokemon.uniqueId}`, {
+                            state: {
+                              maxPokemons: user.pokemons.length,
+                            },
+                          })
+                        }
                       >
                         DETAILS
                       </button>
