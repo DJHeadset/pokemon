@@ -1,4 +1,4 @@
-import { useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useUserData from "../hooks/useUserData";
 import Loading from "./Loading/Loading";
@@ -70,33 +70,56 @@ function Hospital() {
     (pokemon) => !pokemon.hospital.inHospital
   );
 
-  const renderPokemonCard = (pokemon, isInHospital) => (
-    <div className="cards" key={pokemon.uniqueId} id={pokemon.uniqueId}>
-      <img alt="poke-Icon" src={pokemon.sprites.front_default} />
-      <div className="Poke-Name">{pokemon.name}</div>
-      <div className="Poke-Stats">
-        <p>
-          HP: {isInHospital ? getHp(pokemon) : pokemon.stats[0].stat}/
-          {pokemon.stats[6].stat}
-        </p>
-      </div>
-      <button className="pokemon-btn" onClick={() => console.log(pokemon.name)}>
-        DETAILS
-      </button>
-      {isInHospital ? (
-        <button className="pokemon-btn" onClick={() => handleRelease(pokemon)}>
-          RELEASE
-        </button>
-      ) : (
+  const renderPokemonCard = (pokemon, isInHospital) => {
+    const currentHp = isInHospital ? getHp(pokemon) : pokemon.stats[0].stat;
+    const maxHp = pokemon.stats[6].stat;
+
+    const hpColor =
+      currentHp === maxHp
+        ? "lightgreen"
+        : currentHp <= maxHp / 2
+        ? "red"
+        : "black";
+
+    return (
+      <div className="cards" key={pokemon.uniqueId} id={pokemon.uniqueId}>
+        <img alt="poke-Icon" src={pokemon.sprites.front_default} />
+        <div className="Poke-Name">{pokemon.name}</div>
+        <div className="Poke-Stats">
+          <p style={{ color: hpColor }}>
+            HP: {currentHp}/{maxHp}
+          </p>
+        </div>
         <button
           className="pokemon-btn"
-          onClick={() => handleSendToHospital(pokemon)}
+          onClick={() =>
+            navigate(`/details/${pokemon.uniqueId}`, {
+              state: {
+                maxPokemons: user.pokemons.length,
+              },
+            })
+          }
         >
-          Send to hospital
+          DETAILS
         </button>
-      )}
-    </div>
-  );
+        {isInHospital ? (
+          <button
+            className="pokemon-btn"
+            onClick={() => handleRelease(pokemon)}
+          >
+            RELEASE
+          </button>
+        ) : (
+          <button
+            className="pokemon-btn"
+            onClick={() => handleSendToHospital(pokemon)}
+          >
+            Send to hospital
+          </button>
+        )}
+      </div>
+    );
+  };
 
   return (
     <>
