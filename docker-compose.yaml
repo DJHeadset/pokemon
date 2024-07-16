@@ -1,0 +1,40 @@
+version: "3.9"
+services:
+  mongo_db:
+    container_name: db_container
+    image: mongo:4.4
+    restart: always
+    networks:
+      - mern-network
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+
+  backend:
+    container_name: backend
+    build:
+      context: ./backend
+    depends_on:
+      - mongo_db
+    networks:
+      - mern-network
+    environment:
+      PORT: 5000
+      MONGODB_URI: mongodb://root:example@mongo_db:27017/admin
+      DB_NAME: sample
+      NAME: Truly
+
+  frontend:
+    container_name: frontend
+    build:
+      context: ./frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - mern-network
+
+networks:
+  mern-network:
+    driver: bridge

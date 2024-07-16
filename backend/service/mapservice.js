@@ -1,3 +1,5 @@
+const fetch = require("node-fetch")
+
 const fetchRegionData = async (URL) => {
   try {
     const regionResponse = await fetch(URL);

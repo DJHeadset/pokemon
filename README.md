@@ -47,6 +47,8 @@ The application adopts a microservices architecture, with distinct backends mana
 
 ## Getting Started
 
+- For developers
+
 1. Clone the repository:
 2. Enter the frontend folder
 3. Install dependencies
@@ -69,6 +71,17 @@ In a different terminal:
 cd backend
 npm i
 npm run dev
+```
+
+For production enviroment
+
+1. Clone the repository:
+2. Start the project
+3. Access the site through [localhost](http://localhost:3000/)
+
+```
+git clone git@github.com:DJHeadset/pokemon.git
+docker compose up
 ```
 
 ## License
