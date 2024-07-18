@@ -4,6 +4,8 @@ const User = require("../model/user");
 const bcrypt = require("bcryptjs");
 const { jwtSecret } = process.env;
 
+let onlineUsers = new Set();
+
 async function getUserFromToken(token) {
   return new Promise((resolve, reject) => {
     jwt.verify(token, jwtSecret, async (err, decodedToken) => {
@@ -134,6 +136,7 @@ exports.login = async (req, res, next) => {
               expiresIn: maxAge, // 3hrs in sec
             }
           );
+          onlineUsers.add(user._id.toString());
           res.cookie("user", token, {
             maxAge: maxAge * 1000, // 3hrs in ms
           });
@@ -209,13 +212,12 @@ exports.deleteUser = async (req, res, next) => {
 exports.getUsers = async (req, res, next) => {
   await User.find({})
     .then((users) => {
-      const userResponse = users.map((user) => {
-        const container = {};
-        container.id = user._id;
-        container.username = user.username;
-        container.role = user.role;
-        return container;
-      });
+      const userResponse = users.map((user) => ({
+        id: user._id,
+        username: user.username,
+        role: user.role,
+        online: onlineUsers.has(user._id.toString()),
+      }));
       res.status(200).json({ user: userResponse });
     })
     .catch((err) =>
@@ -260,5 +262,17 @@ exports.getPokemon = async (req, res, next) => {
 };
 
 exports.logout = async (req, res, next) => {
+  const { userId } = req.body;
+  onlineUsers.delete(userId);
+  res
+    .clearCookie("user")
+    .status(200)
+    .json({ message: "User successfully logged out" });
+  /*
+  const user = req.body
+  const userId = user._id
+  console.log(userId)
+  onlineUsers.delete(userId)
   res.clearCookie("user").send();
+  */
 };

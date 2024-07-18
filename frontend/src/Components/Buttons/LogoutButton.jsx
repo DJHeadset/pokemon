@@ -1,10 +1,18 @@
 import { useNavigate } from "react-router-dom";
 
-function LogoutButton() {
+function LogoutButton({ userId }) {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    fetch("/api/auth/logout");
+    fetch("/api/auth/logout", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify({ userId: userId }),
+    });
     navigate("/");
   };
 

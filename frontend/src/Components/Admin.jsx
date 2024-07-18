@@ -74,6 +74,17 @@ function Admin() {
               <tr key={user.id}>
                 <td>{user.username}</td>
                 <td>{user.role}</td>
+                <td style={{ textAlign: "center" }}>
+                  <span
+                    style={{
+                      display: "inline-block",
+                      width: "10px",
+                      height: "10px",
+                      borderRadius: "50%",
+                      backgroundColor: user.online ? "green" : "red",
+                    }}
+                  ></span>
+                </td>
                 <td>
                   {user.role !== "admin" ? (
                     <button onClick={() => onUpgrade(user.id)}>UPGRADE</button>

@@ -27,5 +27,5 @@ router.route("/getpokemon/:id").get(getPokemon);
 router.route("/newpokemon").post(newpokemon);
 router.route("/updateownpokemon").post(updateOwnPokemon);
 router.route("/hospital").post(pokmemonHospital);
-router.route("/logout").get(logout);
+router.route("/logout").delete(logout);
 module.exports = router;

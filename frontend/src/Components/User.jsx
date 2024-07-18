@@ -71,7 +71,7 @@ function User() {
           </div>
           <div style={{ display: "flex", flexDirection: "column" }}>
             <AdminButton />
-            <LogoutButton />
+            <LogoutButton userId={user.userId} />
             <MapButton />
             <button
               className="pokemon-btn"
