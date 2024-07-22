@@ -15,6 +15,8 @@ import Map from "./Components/Map";
 import City from "./Components/City";
 import Hospital from "./Components/Hospital";
 import Details from "./Components/Details";
+import Lobby from "./Components/Lobby";
+import Pvp from "./Components/Pvp";
 
 const router = createBrowserRouter([
   {
@@ -68,6 +70,14 @@ const router = createBrowserRouter([
       {
         path: "/details/:id",
         element: <Details />,
+      },
+      {
+        path: "/lobby",
+        element: <Lobby />,
+      },
+      {
+        path: "/pvp",
+        element: <Pvp />,
       },
     ],
   },

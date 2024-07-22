@@ -1,4 +1,4 @@
-const fetch = require("node-fetch")
+const fetch = require("node-fetch");
 
 const fetchRegionData = async (URL) => {
   try {
@@ -127,7 +127,7 @@ exports.city = async (req, res, next) => {
   const populatedLocations = ["city", "town", "island"];
 
   if (populatedLocations.some((location) => data.name.includes(location))) {
-    data.encounters.push("Hospital");
+    data.encounters.push("Hospital", "PVP");
   }
 
   res.send(data);

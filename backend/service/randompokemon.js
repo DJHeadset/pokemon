@@ -1,4 +1,4 @@
-const fetch = require("node-fetch")
+const fetch = require("node-fetch");
 
 const { calculateStats } = require("./calculatestats");
 const { fetchPokemonData } = require("./fetchpokemondata");
@@ -51,10 +51,6 @@ function getPokemonByMethod(encounters, method) {
     });
   });
   return randomPokemons;
-}
-
-function getHospital() {
-  console.log("hospital");
 }
 
 function getWater(encounters) {
@@ -160,8 +156,8 @@ function getRandomPokemon(pokeSet) {
 exports.randomPokemon = async (req, res, next) => {
   const id = req.params.id;
   const method = req.params.method;
-  if (method === "Hospital") {
-    res.send({ message: "Hospital" });
+  if (method === "Hospital" || method === "PVP") {
+    res.send({ message: method });
   } else {
     try {
       const response = await fetch(

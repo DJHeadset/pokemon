@@ -1,13 +1,15 @@
 const express = require("express");
 const cookieParser = require("cookie-parser");
+const connectDB = require("./db");
+const { adminAuth } = require("./middleware/auth");
+const { initializeWebSocket } = require("./fight/pvp");
 
 const app = express();
 const PORT = 5000;
 const server = app.listen(PORT, () =>
   console.log(`Server Connected to port ${PORT}`)
 );
-const connectDB = require("./db");
-const { adminAuth } = require("./middleware/auth");
+initializeWebSocket(server);
 
 //Connecting the Database
 connectDB();

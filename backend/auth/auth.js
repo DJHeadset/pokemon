@@ -3,29 +3,9 @@ const jwt = require("jsonwebtoken");
 const User = require("../model/user");
 const bcrypt = require("bcryptjs");
 const { jwtSecret } = process.env;
+const { getUserFromToken } = require("../service/getusersfromtoken");
 
 let onlineUsers = new Set();
-
-async function getUserFromToken(token) {
-  return new Promise((resolve, reject) => {
-    jwt.verify(token, jwtSecret, async (err, decodedToken) => {
-      if (err) {
-        return reject({ status: 401, message: "Not authorized" });
-      } else {
-        try {
-          const user = await User.findById(decodedToken.id);
-          if (!user) {
-            return reject({ status: 404, message: "User not found" });
-          } else {
-            resolve(user);
-          }
-        } catch (error) {
-          reject({ status: 500, message: error.message });
-        }
-      }
-    });
-  });
-}
 
 async function sameUsername(name) {
   try {
@@ -268,11 +248,4 @@ exports.logout = async (req, res, next) => {
     .clearCookie("user")
     .status(200)
     .json({ message: "User successfully logged out" });
-  /*
-  const user = req.body
-  const userId = user._id
-  console.log(userId)
-  onlineUsers.delete(userId)
-  res.clearCookie("user").send();
-  */
 };

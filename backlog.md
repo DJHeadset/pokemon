@@ -1,4 +1,4 @@
-- Pokemon details
+- PVP
 - Post Office
     users can send messages to each other
 Evolution
@@ -8,3 +8,5 @@ Evolution
 - Implement moves
 - Switch Pokemons mid-battle(?)
 - .env generated from Github Secret
+- mobile phone port
+- hungarian language
