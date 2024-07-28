@@ -1,4 +1,4 @@
-import Loading from "./Loading/Loading";
+import Loading from "./Layout/Loading";
 import usePokemonData from "../hooks/usePokemonData";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import LogoutButton from "./Buttons/LogoutButton";

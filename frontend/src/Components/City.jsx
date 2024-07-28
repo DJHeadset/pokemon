@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import Loading from "./Loading/Loading";
+import Loading from "./Layout/Loading";
 import useUserData from "../hooks/useUserData";
 import PokemonList from "./Layout/PokemonList";
 

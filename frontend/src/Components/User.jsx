@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Loading from "./Loading/Loading";
+import Loading from "./Layout/Loading";
 import { useNavigate } from "react-router-dom";
 import useUserData from "../hooks/useUserData";
 import LogoutButton from "./Buttons/LogoutButton";

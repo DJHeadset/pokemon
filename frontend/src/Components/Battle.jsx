@@ -1,6 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import battle from "../resources/pic/Battle.png";
 import { useEffect, useState } from "react";
+import battle from "../resources/pic/Battle.png";
+import VsPokemons from "./Layout/VsPokemons";
 
 function Battle() {
   const location = useLocation();
@@ -120,42 +121,12 @@ function Battle() {
       <>
         <div className="card" style={{ backgroundImage: `url(${battle})` }}>
           <div className="battle-container">
-            <div className="own-pokemon battlecards">
-              <div className="damage" id="enemyAttackNumber">
-                {ownPokemonStats.attack}
-              </div>
-              <div className="hp-bar-container">
-                <progress
-                  className="hp-bar"
-                  value={ownPokemonStats.hp}
-                  max={ownPokemonStats.maxHp}
-                />
-              </div>
-              <img
-                className="img"
-                alt="Poke-Icon"
-                src={ownPokemon.sprites.back_default}
-              />
-              <div className="Poke-Name">{ownPokemon.name}</div>
-            </div>
-            <div className="enemy-pokemon battlecards">
-              <div className="damage" id="attackNumber">
-                {enemyPokemonStats.attack}
-              </div>
-              <div className="hp-bar-container">
-                <progress
-                  className="hp-bar"
-                  value={enemyPokemonStats.hp}
-                  max={enemyPokemonStats.maxHp}
-                />
-              </div>
-              <img
-                className="img"
-                alt="Poke-Icon"
-                src={enemyPokemon.sprites.front_default}
-              />
-              <div className="Poke-Name">{enemyPokemon.name}</div>
-            </div>
+            <VsPokemons
+              ownPokemon={ownPokemon}
+              ownPokemonStats={ownPokemonStats}
+              enemyPokemon={enemyPokemon}
+              enemyPokemonStats={enemyPokemonStats}
+            />
             <button
               style={{ flexBasis: "10%" }}
               className="pokemon-btn"

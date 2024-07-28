@@ -18,10 +18,11 @@ exports.initializeWebSocket = (server) => {
       try {
         const data = JSON.parse(message);
         const gameId = data.gameId;
+        console.log(data)
 
-        if (data.type === "ATTACK" && games[gameId].turn === playerId) {
+        if (data.type === "ATTACK") {
           //handleAttack(gameId, playerId);
-          console.log("ATTACK");
+          console.log(`ATTACK`);
         }
       } catch (error) {
         console.error("Error processing message:", error);

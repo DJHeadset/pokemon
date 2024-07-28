@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useUserData from "../hooks/useUserData";
-import Loading from "./Loading/Loading";
+import Loading from "./Layout/Loading";
 import "../App.css";
 
 function Hospital() {

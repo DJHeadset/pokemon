@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import battle from "../resources/pic/Battle.png";
-import Loading from "./Loading/Loading";
+import Loading from "./Layout/Loading";
+import VsPokemons from "./Layout/VsPokemons";
 
 function Pvp() {
   const location = useLocation();
@@ -10,8 +11,16 @@ function Pvp() {
   const [enemyPokemon, setEnemyPokemon] = useState(null);
   const [enemyPokemonStats, setEnemyPokemonStats] = useState(null);
   const [ownPokemonStats, setOwnPokemonStats] = useState(null);
+  const [gameId, setGameId] = useState(null);
   const [waiting, setWaiting] = useState(false);
-  let ws = null;
+  const ws = useRef(null);
+
+  const handleAttack = () => {
+    console.log("attack");
+    if (ws.current) {
+      ws.current.send(JSON.stringify({ type: "ATTACK", gameId: 2 }));
+    }
+  };
 
   const setupGame = async () => {
     try {
@@ -60,17 +69,19 @@ function Pvp() {
   };
 
   const establishWebSocketConnection = (uniqueId) => {
-    ws = new WebSocket(`ws://${window.location.host}/${uniqueId}`, ["binary"]);
+    ws.current = new WebSocket(`ws://${window.location.host}/${uniqueId}`, [
+      "binary",
+    ]);
 
-    ws.onopen = () => {
+    ws.current.onopen = () => {
       console.log("WebSocket connected");
     };
 
-    ws.onerror = (error) => {
+    ws.current.onerror = (error) => {
       console.error("WebSocket error:", error);
     };
 
-    ws.onmessage = (event) => {
+    ws.current.onmessage = (event) => {
       const message = JSON.parse(event.data);
       if (message.type === "PLAYER_JOINED") {
         console.log("PLAYER_JOINED");
@@ -87,7 +98,7 @@ function Pvp() {
       }
     };
 
-    ws.onclose = () => {
+    ws.current.onclose = () => {
       console.log("WebSocket closed");
     };
   };
@@ -98,9 +109,11 @@ function Pvp() {
 
   useEffect(() => {
     return () => {
-      if (ws) ws.close();
+      if (ws.current) ws.current.close();
     };
-  }, [ws]);
+  }, []);
+
+  let isMyTurn;
 
   if (!ownPokemon || (!enemyPokemon && !waiting)) {
     return <Loading />;
@@ -110,49 +123,23 @@ function Pvp() {
     return (
       <>
         <div className="card" style={{ backgroundImage: `url(${battle})` }}>
-          <div className="own-pokemon battlecards">
-            <div className="damage" id="enemyAttackNumber">
-              {ownPokemonStats.attack}
-            </div>
-            <div className="hp-bar-container">
-              <progress
-                className="hp-bar"
-                value={ownPokemonStats.hp}
-                max={ownPokemonStats.maxHp}
-              />
-            </div>
-            <img
-              className="img"
-              alt="Poke-Icon"
-              src={ownPokemon.sprites.back_default}
+          <div className="battle-container">
+            <VsPokemons
+              ownPokemon={ownPokemon}
+              ownPokemonStats={ownPokemonStats}
+              enemyPokemon={enemyPokemon}
+              enemyPokemonStats={enemyPokemonStats}
             />
-            <div className="Poke-Name">{ownPokemon.name}</div>
-          </div>
-          <div className="enemy-pokemon battlecards">
             {enemyPokemonStats ? (
-              <>
-                <div className="damage" id="attackNumber">
-                  {enemyPokemonStats.attack}
-                </div>
-                <div className="hp-bar-container">
-                  <progress
-                    className="hp-bar"
-                    value={enemyPokemonStats.hp}
-                    max={enemyPokemonStats.maxHp}
-                  />
-                </div>
-                <img
-                  className="img"
-                  alt="Poke-Icon"
-                  src={enemyPokemon.sprites.front_default}
-                />
-                <div className="Poke-Name">{enemyPokemon.name}</div>
-              </>
+              <button
+                style={{ flexBasis: "10%" }}
+                className="pokemon-btn"
+                onClick={handleAttack}
+              >
+                ATTACK
+              </button>
             ) : (
-              <>
-                <h2>Waiting for another player</h2>
-                <Loading />
-              </>
+              <></>
             )}
           </div>
         </div>
