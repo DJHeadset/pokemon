@@ -9,13 +9,13 @@ const {
   getUser,
   getPokemon,
   logout,
-} = require("./auth");
-const { adminAuth } = require("../middleware/auth");
-const { newpokemon } = require("../pokemon/newPokemon");
+} = require("../controllers/auth");
+const { adminAuth } = require("../middlewares/auth");
+const { newpokemon } = require("../controllers/newPokemon");
 const {
   updateOwnPokemon,
   pokmemonHospital,
-} = require("../pokemon/updatePokemon");
+} = require("../controllers/updatePokemon");
 
 router.route("/register").post(register);
 router.route("/login").post(login);

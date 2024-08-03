@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const { jwtSecret } = process.env;
-const User = require("../model/user");
+const User = require("../models/user");
 
 exports.getUserFromToken = (token) => {
   return new Promise((resolve, reject) => {

@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const { pokedata } = require("../service/fetchpokemon");
-const { regions, location, city } = require("../service/mapservice");
-const { randomPokemon } = require("../service/randompokemon");
-const { battleSetup, attack } = require("../fight/pve");
-const { joingame } = require("../fight/pvp");
+const { pokedata } = require("../utils/fetchpokemon");
+const { regions, location, city } = require("../utils/mapservice");
+const { randomPokemon } = require("../utils/randompokemon");
+const { battleSetup, attack } = require("../controllers/pve");
+const { joingame } = require("../controllers/pvp");
 
 router.route("/region").get(regions);
 router.route("/city/:id").get(city);

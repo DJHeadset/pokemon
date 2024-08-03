@@ -1,5 +1,5 @@
 const WebSocket = require("ws");
-const { getUserFromToken } = require("../service/getusersfromtoken");
+const { getUserFromToken } = require("../utils/getusersfromtoken");
 
 let games = {};
 let players = {};

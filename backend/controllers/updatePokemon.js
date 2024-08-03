@@ -1,5 +1,5 @@
-const { calculateStats } = require("../service/calculatestats");
-const User = require("../model/user");
+const { calculateStats } = require("../utils/calculatestats");
+const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 const { jwtSecret } = process.env;
 

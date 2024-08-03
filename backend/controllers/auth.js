@@ -1,9 +1,9 @@
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
-const User = require("../model/user");
+const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const { jwtSecret } = process.env;
-const { getUserFromToken } = require("../service/getusersfromtoken");
+const { getUserFromToken } = require("../utils/getusersfromtoken");
 
 let onlineUsers = new Set();
 
