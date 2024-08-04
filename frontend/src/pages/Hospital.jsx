@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useUserData from "../hooks/useUserData";
-import Loading from "./Layout/Loading";
-import "../App.css";
+import Loading from "../components/Loading";
+import "../styles/App.css";
 
 function Hospital() {
   const { user, loading, fetchUserData } = useUserData();

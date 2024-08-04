@@ -1,7 +1,8 @@
 import { Link, Outlet, useLocation } from "react-router-dom";
-import logo from "../../resources/pic/logo.png";
-import "./Header.css";
-import decoder from "../../service/Decoder";
+import logo from "../resources/pic/logo.png";
+import "../styles/Loading.css";
+import "../styles/Header.css"
+import decoder from "../utils/Decoder";
 
 function Header() {
   let page = useLocation();

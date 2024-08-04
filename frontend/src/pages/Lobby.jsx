@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import useUserData from "../hooks/useUserData";
-import PokemonList from "./Layout/PokemonList";
+import PokemonList from "../components/PokemonList";
 
 function Lobby() {
   const [sortCriteria, setSortCriteria] = useState("level");

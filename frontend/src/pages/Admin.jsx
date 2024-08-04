@@ -1,62 +1,37 @@
 import { useEffect, useState } from "react";
+import { deleteUser, fetchUserList, upgradeUser } from "../services/userService";
 
 function Admin() {
   const [users, setUsers] = useState(null);
 
-  function onUpgrade(id) {
-    const user = {
-      role: "admin",
-      id: id,
-    };
-    fetch("/api/auth/update", {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify(user),
-    }).then((response) => {
-      if (response.status === 201) {
-        fetchUserList();
-      } else {
-        console.error("Upgrade failed:", response.statusText);
-      }
-    });
+  async function onUpgrade(id) {
+  const success = await upgradeUser(id);
+  if (success) {
+    loadUsers();
+  } else {
+    console.error("Failed to upgrade user.");
   }
+}
 
-  function onDelete(id) {
-    let answer = window.confirm("are you sure you want to delete user?");
-    if (answer) {
-      fetch("api/auth/deleteUser", {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({ id: id }),
-      }).then((response) => {
-        if (response.status === 201) {
-          fetchUserList();
-        } else {
-          console.error("Upgrade failed:", response.statusText);
-        }
-      });
+  async function onDelete(id) {
+  if (window.confirm("Are you sure you want to delete this user?")) {
+    const success = await deleteUser(id);
+    if (success) {
+      loadUsers();
+    } else {
+      console.error("Failed to delete user.");
     }
   }
+}
 
-  const fetchUserList = () => {
-    fetch("/api/auth/getusers")
-      .then((res) => res.json())
-      .then((data) => {
-        setUsers(data.user);
-      });
-  };
+const loadUsers = async () => {
+  const usersData = await fetchUserList();
+  setUsers(usersData);
+};
 
-  useEffect(() => {
-    fetchUserList();
-  }, []);
+useEffect(() => {
+  loadUsers();
+}, []);
 
   return (
     users && (
@@ -64,9 +39,11 @@ function Admin() {
         <div>ADMIN</div>
         <table>
           <thead>
-            <tr>
+          <tr>
               <th style={{ width: 200, textAlign: "left" }}>Username</th>
               <th style={{ width: 100, textAlign: "left" }}>Role</th>
+              <th style={{ width: 50, textAlign: "center" }}>Online</th>
+              <th style={{ width: 100, textAlign: "center" }}>Actions</th>
             </tr>
           </thead>
           <tbody>

@@ -1,8 +1,8 @@
-import Loading from "./Layout/Loading";
+import Loading from "../components/Loading";
 import usePokemonData from "../hooks/usePokemonData";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import LogoutButton from "./Buttons/LogoutButton";
-import MapButton from "./Buttons/MapButton";
+import LogoutButton from "../components/Buttons/LogoutButton";
+import MapButton from "../components/Buttons/MapButton";
 
 function Details() {
   const location = useLocation();

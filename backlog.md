@@ -17,14 +17,14 @@ Evolution
 │   ├── /public           # Static files
 │   └── /src
 │       ├── /components   # React components
-│       ├── /hooks        # Custom hooks
+│       ├── /hooks        ## Custom hooks
 │       ├── /context      # Context API providers
-│       ├── /pages        # Page components
+│       ├── /pages        ## Page components
 │       ├── /services     # API calls
-│       ├── /styles       # CSS or SCSS files
+│       ├── /styles       ## CSS or SCSS files
 │       ├── /utils        # Utility functions
-│       ├── App.js        # Main App component
-│       ├── index.js      # Entry point
+│       ├── App.js        ## Main App component
+│       ├── index.js      ## Entry point
 │       └── ...           # Other files
 │
 ├── /server               # Express server

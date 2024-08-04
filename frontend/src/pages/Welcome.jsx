@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "../Welcome.css";
-import decoder from "../service/Decoder";
+import decoder from "../utils/Decoder";
 import { useNavigate } from "react-router-dom";
 
 function Welcome() {

@@ -1,10 +1,10 @@
 import { useState } from "react";
-import Loading from "./Layout/Loading";
 import { useNavigate } from "react-router-dom";
+import Loading from "../components/Loading";
 import useUserData from "../hooks/useUserData";
-import LogoutButton from "./Buttons/LogoutButton";
-import MapButton from "./Buttons/MapButton";
-import AdminButton from "./Buttons/AdminButton";
+import LogoutButton from "../components/Buttons/LogoutButton";
+import MapButton from "../components/Buttons/MapButton";
+import AdminButton from "../components/Buttons/AdminButton";
 
 function User() {
   const { user, loading } = useUserData();

@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import starterpack from "../resources/starterpacks.json";
 import { useState } from "react";
-import Loading from "./Layout/Loading";
+import Loading from "../components/Loading";
 
 function StarterPack() {
   const navigate = useNavigate();

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import Loading from "./Layout/Loading";
-import "../App.css";
+import Loading from "../components/Loading";
+import "../styles/App.css";
 import { useNavigate } from "react-router-dom";
 
 function Map() {

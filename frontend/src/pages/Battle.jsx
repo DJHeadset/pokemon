@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import battle from "../resources/pic/Battle.png";
-import VsPokemons from "./Layout/VsPokemons";
+import VsPokemons from "../components/VsPokemons";
 
 function Battle() {
   const location = useLocation();
