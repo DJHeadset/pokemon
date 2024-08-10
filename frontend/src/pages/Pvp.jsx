@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import battle from "../resources/pic/Battle.png";
 import Loading from "../components/Loading";
 import VsPokemons from "../components/VsPokemons";
+import decoder from "../utils/Decoder";
 
 function Pvp() {
   const location = useLocation();
@@ -13,12 +14,21 @@ function Pvp() {
   const [ownPokemonStats, setOwnPokemonStats] = useState(null);
   const [gameId, setGameId] = useState(null);
   const [waiting, setWaiting] = useState(false);
+  const [currentTurn, setCurrentTurn] = useState(null);
+  const [playerId, setPlayerId] = useState(null)
   const ws = useRef(null);
 
+  useEffect(() => {
+    const cookie = decoder();
+    if (cookie) {
+      setPlayerId(cookie.id);
+    }
+  }, []);
+
   const handleAttack = () => {
-    console.log("attack");
+    console.log(`ATTACK ${gameId}`);
     if (ws.current) {
-      ws.current.send(JSON.stringify({ type: "ATTACK", gameId: 2 }));
+      ws.current.send(JSON.stringify({ type: "ATTACK", gameId: gameId }));
     }
   };
 
@@ -36,6 +46,7 @@ function Pvp() {
       if (response.ok) {
         const data = await response.json();
         const player1 = data.player1;
+        
         setOwnPokemon(player1.pokemon);
         setOwnPokemonStats({
           hp: player1.pokemon.stats[0].stat,
@@ -49,9 +60,11 @@ function Pvp() {
         establishWebSocketConnection(player1.id);
         if (data.player2 === null) {
           console.log("WAITING");
+          //setPlayerId(player1.id)
           setWaiting(true);
         } else {
           const player2 = data.player2;
+          //setPlayerId(player2.id)
           setEnemyPokemon(player2.pokemon);
           setEnemyPokemonStats({
             hp: player2.pokemon.stats[0].stat,
@@ -59,6 +72,8 @@ function Pvp() {
             def: player2.pokemon.stats[2].stat,
             maxHp: player2.pokemon.stats[6].stat,
           });
+          setGameId(data.gameId)
+          setCurrentTurn(data.player2.id);
         }
       } else {
         console.error("Error setting up the battle");
@@ -85,6 +100,8 @@ function Pvp() {
       const message = JSON.parse(event.data);
       if (message.type === "PLAYER_JOINED") {
         console.log("PLAYER_JOINED");
+        console.log(message)
+        //setPlayerId(message.opponent.id)
         setEnemyPokemon(message.opponent.pokemon);
         setEnemyPokemonStats({
           hp: message.opponent.pokemon.stats[0].stat,
@@ -92,9 +109,15 @@ function Pvp() {
           def: message.opponent.pokemon.stats[2].stat,
           maxHp: message.opponent.pokemon.stats[6].stat,
         });
+        setGameId(message.gameId)
+        setCurrentTurn(message.turn);
         setWaiting(false);
       } else if (message.type === "WAITING_FOR_PLAYER") {
         setWaiting(true);
+      }else if (message.type === "GAME_STATE") {
+        const gameState = message.state;
+        setCurrentTurn(gameState.turn)
+        console.log("Game state received:", gameState);
       }
     };
 
@@ -113,7 +136,8 @@ function Pvp() {
     };
   }, []);
 
-  let isMyTurn;
+  let isMyTurn = (currentTurn === playerId)
+  console.log(`turn ${currentTurn} ME ${playerId} MYTURN ${isMyTurn}`)
 
   if (!ownPokemon || (!enemyPokemon && !waiting)) {
     return <Loading />;
@@ -132,7 +156,11 @@ function Pvp() {
             />
             {enemyPokemonStats ? (
               <button
-                style={{ flexBasis: "10%" }}
+              style={{
+                flexBasis: "10%",
+                opacity: isMyTurn ? 1 : 0.5, // Adjust opacity based on turn
+                pointerEvents: isMyTurn ? "auto" : "none", // Disable button when not player's turn
+              }}
                 className="pokemon-btn"
                 onClick={handleAttack}
               >

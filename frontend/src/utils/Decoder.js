@@ -6,7 +6,7 @@ function decoder() {
       document.cookie.substring(5, document.cookie.length)
     );
     // For development purposes
-    // console.log(decodedCookie);
+    //console.log(decodedCookie);
     return decodedCookie;
   }
 }

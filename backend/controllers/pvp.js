@@ -4,6 +4,7 @@ const { getUserFromToken } = require("../utils/getusersfromtoken");
 let games = {};
 let players = {};
 let waitingPlayer = null;
+let currentPlayer = null
 
 exports.initializeWebSocket = (server) => {
   const wss = new WebSocket.Server({ server });
@@ -18,11 +19,11 @@ exports.initializeWebSocket = (server) => {
       try {
         const data = JSON.parse(message);
         const gameId = data.gameId;
-        console.log(data)
+        console.log(data);
 
         if (data.type === "ATTACK") {
-          //handleAttack(gameId, playerId);
-          console.log(`ATTACK`);
+          handleAttack(gameId, playerId);
+          //console.log(`ATTACK`);
         }
       } catch (error) {
         console.error("Error processing message:", error);
@@ -41,23 +42,56 @@ exports.initializeWebSocket = (server) => {
 };
 
 exports.joingame = async (req, res, next) => {
-  ownPokemon = req.body.own;
+  pokeId = req.body.own;
   token = req.headers.cookie.substring(5, req.headers.cookie.length);
 
   if (token) {
     const user = await getUserFromToken(token);
-    const pokemon = user.pokemons[ownPokemon - 1];
-    if (waitingPlayer && waitingPlayer.id !== user.id) {
+    const pokemon = user.pokemons[pokeId - 1];
+    if (waitingPlayer && waitingPlayer.id !== user.id && !currentPlayer) {
       console.log("player 2");
+      const gameId = generateGameId();
       currentPlayer = { id: user.id, pokemon };
+      games[gameId] = {
+        players: {
+          [waitingPlayer.id]: { pokemon: waitingPlayer.pokemon },
+          [currentPlayer.id]: { pokemon: currentPlayer.pokemon },
+        },
+        turn: waitingPlayer.id,
+        opponent: {
+          [waitingPlayer.id]: currentPlayer.id,
+          [currentPlayer.id]: waitingPlayer.id,
+        },
+      };
       if (players[waitingPlayer.id]) {
         players[waitingPlayer.id].send(
-          JSON.stringify({ type: "PLAYER_JOINED", opponent: currentPlayer })
+          JSON.stringify({
+            type: "PLAYER_JOINED",
+            player: waitingPlayer,
+            opponent: currentPlayer,
+            gameId,
+            turn: waitingPlayer.id,
+          })
+        );
+      }
+      if (players[currentPlayer.id]) {
+        players[currentPlayer.id].send(
+          JSON.stringify({
+            type: "PLAYER_JOINED",
+            player: currentPlayer,
+            opponent: waitingPlayer,
+            gameId,
+            turn: waitingPlayer.id,
+          })
         );
       }
       return res
         .status(200)
-        .json({ player1: currentPlayer, player2: waitingPlayer });
+        .json({
+          gameId: gameId,
+          player1: currentPlayer,
+          player2: waitingPlayer,
+        });
     } else {
       console.log("player 1");
       waitingPlayer = { id: user.id, pokemon };
@@ -65,3 +99,27 @@ exports.joingame = async (req, res, next) => {
     }
   }
 };
+
+function generateGameId() {
+  return Math.random().toString(36).substr(2, 9);
+}
+
+function handleAttack(gameId, playerId) {
+  console.log(`ATTACK GAME ${gameId} PLAYER ${playerId}`);
+  const game = games[gameId];
+  const attackingPlayer = game.players[playerId];
+  const defendingPlayer = game.players[game.opponent[playerId]];
+  console.log(`Player ${playerId} attacked for 10 damage`);
+  game.turn = game.opponent[playerId];
+  sendGameState(gameId);
+}
+
+function sendGameState(gameId) {
+  const game = games[gameId];
+  Object.keys(game.players).forEach((playerId) => {
+    const ws = players[playerId];
+    if (ws.readyState === WebSocket.OPEN) {
+      ws.send(JSON.stringify({ type: "GAME_STATE", state: game }));
+    }
+  });
+}
