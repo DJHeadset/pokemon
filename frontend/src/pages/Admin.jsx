@@ -1,37 +1,41 @@
 import { useEffect, useState } from "react";
-import { deleteUser, fetchUserList, upgradeUser } from "../services/userService";
+import {
+  deleteUser,
+  fetchUserList,
+  upgradeUser,
+} from "../services/userService";
 
 function Admin() {
   const [users, setUsers] = useState(null);
 
   async function onUpgrade(id) {
-  const success = await upgradeUser(id);
-  if (success) {
-    loadUsers();
-  } else {
-    console.error("Failed to upgrade user.");
-  }
-}
-
-  async function onDelete(id) {
-  if (window.confirm("Are you sure you want to delete this user?")) {
-    const success = await deleteUser(id);
+    const success = await upgradeUser(id);
     if (success) {
       loadUsers();
     } else {
-      console.error("Failed to delete user.");
+      console.error("Failed to upgrade user.");
     }
   }
-}
 
-const loadUsers = async () => {
-  const usersData = await fetchUserList();
-  setUsers(usersData);
-};
+  async function onDelete(id) {
+    if (window.confirm("Are you sure you want to delete this user?")) {
+      const success = await deleteUser(id);
+      if (success) {
+        loadUsers();
+      } else {
+        console.error("Failed to delete user.");
+      }
+    }
+  }
 
-useEffect(() => {
-  loadUsers();
-}, []);
+  const loadUsers = async () => {
+    const usersData = await fetchUserList();
+    setUsers(usersData);
+  };
+
+  useEffect(() => {
+    loadUsers();
+  }, []);
 
   return (
     users && (
@@ -39,7 +43,7 @@ useEffect(() => {
         <div>ADMIN</div>
         <table>
           <thead>
-          <tr>
+            <tr>
               <th style={{ width: 200, textAlign: "left" }}>Username</th>
               <th style={{ width: 100, textAlign: "left" }}>Role</th>
               <th style={{ width: 50, textAlign: "center" }}>Online</th>

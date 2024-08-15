@@ -1,4 +1,4 @@
-const fetch = require("node-fetch")
+const fetch = require("node-fetch");
 
 exports.fetchPokemonData = async (pokemonId) => {
   try {

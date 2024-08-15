@@ -6,7 +6,6 @@ function VsPokemons({
   enemyPokemon,
   enemyPokemonStats,
 }) {
-  
   return (
     <>
       <div className="own-pokemon battlecards">

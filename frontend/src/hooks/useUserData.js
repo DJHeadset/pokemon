@@ -7,7 +7,6 @@ const useUserData = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  
   const getUserData = useCallback(async () => {
     const userData = await fetchUserData();
     if (userData === null) {

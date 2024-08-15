@@ -5,11 +5,11 @@ import "./styles/App.css";
 import Battle from "./pages/Battle";
 import Lost from "./pages/Lost";
 import Win from "./pages/Win";
-//import Header from "./components/Layout/Header";
+import Header from "./components/Header";
 import Welcome from "./pages/Welcome";
 import Admin from "./pages/Admin";
 import User from "./pages/User";
-import PokemonData from "./pages/Pokemondata";
+//import PokemonData from "./pages/Pokemondata";
 import StarterPack from "./pages/StarterPack";
 import Map from "./pages/Map";
 import City from "./pages/City";
@@ -17,7 +17,6 @@ import Hospital from "./pages/Hospital";
 import Details from "./pages/Details";
 import Lobby from "./pages/Lobby";
 import Pvp from "./pages/Pvp";
-import Header from "./components/Header";
 
 const router = createBrowserRouter([
   {
@@ -48,10 +47,12 @@ const router = createBrowserRouter([
         path: "/won",
         element: <Win />,
       },
+      /*
       {
         path: "/data",
         element: <PokemonData />,
       },
+      */
       {
         path: "/starterpack",
         element: <StarterPack />,

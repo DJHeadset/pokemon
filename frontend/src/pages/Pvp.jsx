@@ -15,15 +15,35 @@ function Pvp() {
   const [gameId, setGameId] = useState(null);
   const [waiting, setWaiting] = useState(false);
   const [currentTurn, setCurrentTurn] = useState(null);
-  const [playerId, setPlayerId] = useState(null)
+  //const [playerId, setPlayerId] = useState(null);
+  const playerIdRef = useRef(null);
   const ws = useRef(null);
 
   useEffect(() => {
     const cookie = decoder();
     if (cookie) {
-      setPlayerId(cookie.id);
+      playerIdRef.current = cookie.id;
+      console.log(`playerid ${playerIdRef.current}`);
     }
   }, []);
+
+  useEffect(() => {
+    ownPokemon &&
+      setOwnPokemonStats({
+        hp: ownPokemon.stats[0].stat,
+        maxHp: ownPokemon.stats[6].stat,
+        attack: ownPokemon.attack ? ownPokemon.attack : 0,
+      });
+  }, [ownPokemon]);
+
+  useEffect(() => {
+    enemyPokemon &&
+      setEnemyPokemonStats({
+        hp: enemyPokemon.stats[0].stat,
+        maxHp: enemyPokemon.stats[6].stat,
+        attack: enemyPokemon.attack,
+      });
+  }, [enemyPokemon]);
 
   const handleAttack = () => {
     console.log(`ATTACK ${gameId}`);
@@ -46,16 +66,8 @@ function Pvp() {
       if (response.ok) {
         const data = await response.json();
         const player1 = data.player1;
-        
+
         setOwnPokemon(player1.pokemon);
-        setOwnPokemonStats({
-          hp: player1.pokemon.stats[0].stat,
-          att: player1.pokemon.stats[1].stat,
-          def: player1.pokemon.stats[2].stat,
-          maxHp: player1.pokemon.stats[6].stat
-            ? player1.pokemon.stats[6].stat
-            : player1.pokemon.stats[6].base_stat,
-        });
 
         establishWebSocketConnection(player1.id);
         if (data.player2 === null) {
@@ -66,13 +78,8 @@ function Pvp() {
           const player2 = data.player2;
           //setPlayerId(player2.id)
           setEnemyPokemon(player2.pokemon);
-          setEnemyPokemonStats({
-            hp: player2.pokemon.stats[0].stat,
-            att: player2.pokemon.stats[1].stat,
-            def: player2.pokemon.stats[2].stat,
-            maxHp: player2.pokemon.stats[6].stat,
-          });
-          setGameId(data.gameId)
+
+          setGameId(data.gameId);
           setCurrentTurn(data.player2.id);
         }
       } else {
@@ -100,23 +107,25 @@ function Pvp() {
       const message = JSON.parse(event.data);
       if (message.type === "PLAYER_JOINED") {
         console.log("PLAYER_JOINED");
-        console.log(message)
+        console.log(message);
         //setPlayerId(message.opponent.id)
         setEnemyPokemon(message.opponent.pokemon);
-        setEnemyPokemonStats({
-          hp: message.opponent.pokemon.stats[0].stat,
-          att: message.opponent.pokemon.stats[1].stat,
-          def: message.opponent.pokemon.stats[2].stat,
-          maxHp: message.opponent.pokemon.stats[6].stat,
-        });
-        setGameId(message.gameId)
+
+        setGameId(message.gameId);
         setCurrentTurn(message.turn);
         setWaiting(false);
       } else if (message.type === "WAITING_FOR_PLAYER") {
         setWaiting(true);
-      }else if (message.type === "GAME_STATE") {
+      } else if (message.type === "GAME_STATE") {
         const gameState = message.state;
-        setCurrentTurn(gameState.turn)
+        setCurrentTurn(gameState.turn);
+        const playerId = playerIdRef.current;
+        const opponentId = gameState.opponent[playerId];
+        //console.log(`opponent ${opponentId}`)
+        console.log(`state ${gameState.players[playerId].pokemon.name}`);
+        setOwnPokemon(gameState.players[playerId].pokemon);
+        setEnemyPokemon(gameState.players[opponentId].pokemon);
+
         console.log("Game state received:", gameState);
       }
     };
@@ -136,14 +145,15 @@ function Pvp() {
     };
   }, []);
 
-  let isMyTurn = (currentTurn === playerId)
-  console.log(`turn ${currentTurn} ME ${playerId} MYTURN ${isMyTurn}`)
+  const playerId = playerIdRef.current;
+  let isMyTurn = currentTurn === playerId;
+  console.log(`turn ${currentTurn} ME ${playerId} MYTURN ${isMyTurn}`);
 
   if (!ownPokemon || (!enemyPokemon && !waiting)) {
     return <Loading />;
   }
 
-  if (ownPokemon) {
+  if (ownPokemon && ownPokemonStats) {
     return (
       <>
         <div className="card" style={{ backgroundImage: `url(${battle})` }}>
@@ -156,11 +166,11 @@ function Pvp() {
             />
             {enemyPokemonStats ? (
               <button
-              style={{
-                flexBasis: "10%",
-                opacity: isMyTurn ? 1 : 0.5, // Adjust opacity based on turn
-                pointerEvents: isMyTurn ? "auto" : "none", // Disable button when not player's turn
-              }}
+                style={{
+                  flexBasis: "10%",
+                  opacity: isMyTurn ? 1 : 0.5, // Adjust opacity based on turn
+                  pointerEvents: isMyTurn ? "auto" : "none", // Disable button when not player's turn
+                }}
                 className="pokemon-btn"
                 onClick={handleAttack}
               >
