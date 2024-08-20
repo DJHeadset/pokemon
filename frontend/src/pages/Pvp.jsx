@@ -10,12 +10,9 @@ function Pvp() {
   const { ownPokemonId } = location.state;
   const [ownPokemon, setOwnPokemon] = useState(null);
   const [enemyPokemon, setEnemyPokemon] = useState(null);
-  const [enemyPokemonStats, setEnemyPokemonStats] = useState(null);
-  const [ownPokemonStats, setOwnPokemonStats] = useState(null);
   const [gameId, setGameId] = useState(null);
   const [waiting, setWaiting] = useState(false);
   const [currentTurn, setCurrentTurn] = useState(null);
-  //const [playerId, setPlayerId] = useState(null);
   const playerIdRef = useRef(null);
   const ws = useRef(null);
 
@@ -23,34 +20,25 @@ function Pvp() {
     const cookie = decoder();
     if (cookie) {
       playerIdRef.current = cookie.id;
-      console.log(`playerid ${playerIdRef.current}`);
     }
   }, []);
 
-  useEffect(() => {
-    ownPokemon &&
-      setOwnPokemonStats({
-        hp: ownPokemon.stats[0].stat,
-        maxHp: ownPokemon.stats[6].stat,
-        attack: ownPokemon.attack ? ownPokemon.attack : 0,
-      });
-  }, [ownPokemon]);
-
-  useEffect(() => {
-    enemyPokemon &&
-      setEnemyPokemonStats({
-        hp: enemyPokemon.stats[0].stat,
-        maxHp: enemyPokemon.stats[6].stat,
-        attack: enemyPokemon.attack,
-      });
-  }, [enemyPokemon]);
-
   const handleAttack = () => {
-    console.log(`ATTACK ${gameId}`);
     if (ws.current) {
       ws.current.send(JSON.stringify({ type: "ATTACK", gameId: gameId }));
     }
   };
+
+  function showAttackNumber() {
+    const damageElement = document.getElementById("attackNumber");
+    const enemyDamageElement = document.getElementById("enemyAttackNumber");
+    damageElement.classList.add("animated");
+    enemyDamageElement.classList.add("animated");
+    setTimeout(() => {
+      damageElement.classList.remove("animated");
+      enemyDamageElement.classList.remove("animated");
+    }, 1000);
+  }
 
   const setupGame = async () => {
     try {
@@ -72,11 +60,9 @@ function Pvp() {
         establishWebSocketConnection(player1.id);
         if (data.player2 === null) {
           console.log("WAITING");
-          //setPlayerId(player1.id)
           setWaiting(true);
         } else {
           const player2 = data.player2;
-          //setPlayerId(player2.id)
           setEnemyPokemon(player2.pokemon);
 
           setGameId(data.gameId);
@@ -107,10 +93,7 @@ function Pvp() {
       const message = JSON.parse(event.data);
       if (message.type === "PLAYER_JOINED") {
         console.log("PLAYER_JOINED");
-        console.log(message);
-        //setPlayerId(message.opponent.id)
         setEnemyPokemon(message.opponent.pokemon);
-
         setGameId(message.gameId);
         setCurrentTurn(message.turn);
         setWaiting(false);
@@ -121,11 +104,9 @@ function Pvp() {
         setCurrentTurn(gameState.turn);
         const playerId = playerIdRef.current;
         const opponentId = gameState.opponent[playerId];
-        //console.log(`opponent ${opponentId}`)
-        console.log(`state ${gameState.players[playerId].pokemon.name}`);
         setOwnPokemon(gameState.players[playerId].pokemon);
         setEnemyPokemon(gameState.players[opponentId].pokemon);
-
+        showAttackNumber();
         console.log("Game state received:", gameState);
       }
     };
@@ -147,29 +128,23 @@ function Pvp() {
 
   const playerId = playerIdRef.current;
   let isMyTurn = currentTurn === playerId;
-  console.log(`turn ${currentTurn} ME ${playerId} MYTURN ${isMyTurn}`);
 
   if (!ownPokemon || (!enemyPokemon && !waiting)) {
     return <Loading />;
   }
 
-  if (ownPokemon && ownPokemonStats) {
+  if (ownPokemon) {
     return (
       <>
         <div className="card" style={{ backgroundImage: `url(${battle})` }}>
           <div className="battle-container">
-            <VsPokemons
-              ownPokemon={ownPokemon}
-              ownPokemonStats={ownPokemonStats}
-              enemyPokemon={enemyPokemon}
-              enemyPokemonStats={enemyPokemonStats}
-            />
-            {enemyPokemonStats ? (
+            <VsPokemons ownPokemon={ownPokemon} enemyPokemon={enemyPokemon} />
+            {enemyPokemon ? (
               <button
                 style={{
                   flexBasis: "10%",
-                  opacity: isMyTurn ? 1 : 0.5, // Adjust opacity based on turn
-                  pointerEvents: isMyTurn ? "auto" : "none", // Disable button when not player's turn
+                  opacity: isMyTurn ? 1 : 0.5,
+                  pointerEvents: isMyTurn ? "auto" : "none",
                 }}
                 className="pokemon-btn"
                 onClick={handleAttack}

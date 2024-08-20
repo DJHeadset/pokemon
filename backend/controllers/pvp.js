@@ -1,5 +1,6 @@
 const WebSocket = require("ws");
 const { getUserFromToken } = require("../utils/getusersfromtoken");
+const { convertedGameState } = require("../utils/pokemonfight");
 
 let games = {};
 let players = {};
@@ -19,11 +20,9 @@ exports.initializeWebSocket = (server) => {
       try {
         const data = JSON.parse(message);
         const gameId = data.gameId;
-        console.log(data);
 
         if (data.type === "ATTACK") {
           handleAttack(gameId, playerId);
-          //console.log(`ATTACK`);
         }
       } catch (error) {
         console.error("Error processing message:", error);
@@ -63,23 +62,26 @@ exports.joingame = async (req, res, next) => {
           [currentPlayer.id]: waitingPlayer.id,
         },
       };
+
+      const convertedData = convertedGameState(games[gameId]);
       if (players[waitingPlayer.id]) {
         players[waitingPlayer.id].send(
           JSON.stringify({
             type: "PLAYER_JOINED",
-            player: waitingPlayer,
-            opponent: currentPlayer,
+            player: convertedData.players[waitingPlayer.id],
+            opponent: convertedData.players[currentPlayer.id],
             gameId,
             turn: waitingPlayer.id,
           })
         );
       }
+
       if (players[currentPlayer.id]) {
         players[currentPlayer.id].send(
           JSON.stringify({
             type: "PLAYER_JOINED",
-            player: currentPlayer,
-            opponent: waitingPlayer,
+            player: convertedData.players[currentPlayer.id],
+            opponent: convertedData.players[waitingPlayer.id],
             gameId,
             turn: waitingPlayer.id,
           })
@@ -103,12 +105,10 @@ function generateGameId() {
 }
 
 function handleAttack(gameId, playerId) {
-  console.log(`ATTACK GAME ${gameId} PLAYER ${playerId}`);
   const game = games[gameId];
   const attackingPlayer = game.players[playerId];
   const defendingPlayer = game.players[game.opponent[playerId]];
   const hp = defendingPlayer.pokemon.stats[0].stat;
-  console.log(`hp ${hp}`);
   const att = attackingPlayer.pokemon.stats[1].stat;
   const def = defendingPlayer.pokemon.stats[2].stat;
   const rnd = Math.floor(Math.random() * 38) + 217;
@@ -116,20 +116,25 @@ function handleAttack(gameId, playerId) {
     ((((2 / 5 + 2) * att * 60) / def / 50 + 2) * rnd) / 255
   );
   defendingPlayer.pokemon.stats[0].stat = hp - attack;
+  defendingPlayer.pokemon.attack = null;
+  attackingPlayer.pokemon.attack = attack;
 
-  console.log(
-    `${attackingPlayer.pokemon.name} attacks ${defendingPlayer.pokemon.name} for ${attack}`
-  );
   game.turn = game.opponent[playerId];
   sendGameState(gameId);
 }
 
 function sendGameState(gameId) {
   const game = games[gameId];
+  const convertedData = convertedGameState(game);
+
+  const updatedGameState = {
+    ...game,
+    players: convertedData.players,
+  };
   Object.keys(game.players).forEach((playerId) => {
     const ws = players[playerId];
     if (ws.readyState === WebSocket.OPEN) {
-      ws.send(JSON.stringify({ type: "GAME_STATE", state: game }));
+      ws.send(JSON.stringify({ type: "GAME_STATE", state: updatedGameState }));
     }
   });
 }
