@@ -2,32 +2,13 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import battle from "../resources/pic/Battle.png";
 import VsPokemons from "../components/VsPokemons";
+import { showAttackNumber } from "../services/animations";
 
 function Battle() {
   const location = useLocation();
-  const { ownPokemon, enemyPokemon } = location.state;
-  const [enemyPokemonStats, setEnemyPokemonStats] = useState(null);
-  const [ownPokemonStats, setOwnPokemonStats] = useState(null);
-
   const navigate = useNavigate();
-
-  useEffect(() => {
-    ownPokemon &&
-      setOwnPokemonStats({
-        hp: ownPokemon.stats[0].stat,
-        maxHp: ownPokemon.stats[6].stat,
-        attack: ownPokemon.attack ? ownPokemon.attack : 0,
-      });
-  }, [ownPokemon]);
-
-  useEffect(() => {
-    enemyPokemon &&
-      setEnemyPokemonStats({
-        hp: enemyPokemon.stats[6].stat,
-        maxHp: enemyPokemon.stats[6].stat,
-        attack: enemyPokemon.attack,
-      });
-  }, [enemyPokemon]);
+  const [ownPokemon, setOwnPokemon] = useState(location.state.ownPokemon);
+  const [enemyPokemon, setEnemyPokemon] = useState(location.state.enemyPokemon);
 
   async function updateOwnPokemon(data) {
     const hp = data.own.hp - data.own.attack;
@@ -65,33 +46,17 @@ function Battle() {
   async function handleAttack() {
     const response = await fetch(`/pokemon/battle/attack`);
     const data = await response.json();
-    setEnemyPokemonStats({
-      ...enemyPokemonStats,
-      hp: data.enemy.hp,
-      attack: data.enemy.attack,
-    });
-    setOwnPokemonStats({
-      ...ownPokemonStats,
-      hp: data.own.hp,
-      attack: data.own.attack,
-    });
+
+    setEnemyPokemon(data.players.enemy.pokemon);
+
+    setOwnPokemon(data.players.own.pokemon);
+
     showAttackNumber();
-    if (data.own.hp <= 0) {
+    if (data.players.own.pokemon.hp <= 0) {
       handleDefeat(data);
-    } else if (data.enemy.hp <= 0) {
+    } else if (data.players.enemy.pokemon.hp <= 0) {
       handleVictory(data);
     }
-  }
-
-  function showAttackNumber() {
-    const damageElement = document.getElementById("attackNumber");
-    const enemyDamageElement = document.getElementById("enemyAttackNumber");
-    damageElement.classList.add("animated");
-    enemyDamageElement.classList.add("animated");
-    setTimeout(() => {
-      damageElement.classList.remove("animated");
-      enemyDamageElement.classList.remove("animated");
-    }, 1000);
   }
 
   const setupBattle = async () => {
@@ -115,17 +80,12 @@ function Battle() {
     setupBattle();
   }, []);
 
-  if (ownPokemonStats && enemyPokemonStats) {
+  if (ownPokemon && enemyPokemon) {
     return (
       <>
         <div className="card" style={{ backgroundImage: `url(${battle})` }}>
           <div className="battle-container">
-            <VsPokemons
-              ownPokemon={ownPokemon}
-              ownPokemonStats={ownPokemonStats}
-              enemyPokemon={enemyPokemon}
-              enemyPokemonStats={enemyPokemonStats}
-            />
+            <VsPokemons ownPokemon={ownPokemon} enemyPokemon={enemyPokemon} />
             <button
               style={{ flexBasis: "10%" }}
               className="pokemon-btn"

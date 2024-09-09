@@ -149,7 +149,6 @@ function getRandomPokemon(pokeSet) {
 
     return selectedPokemon;
   }
-
   return null;
 }
 

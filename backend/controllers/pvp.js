@@ -1,6 +1,9 @@
 const WebSocket = require("ws");
 const { getUserFromToken } = require("../utils/getusersfromtoken");
-const { convertedGameState } = require("../utils/pokemonfight");
+const {
+  convertedGameState,
+  calculateAttack,
+} = require("../utils/pokemonfight");
 
 let games = {};
 let players = {};
@@ -109,14 +112,12 @@ function handleAttack(gameId, playerId) {
   const attackingPlayer = game.players[playerId];
   const defendingPlayer = game.players[game.opponent[playerId]];
   const hp = defendingPlayer.pokemon.stats[0].stat;
-  const att = attackingPlayer.pokemon.stats[1].stat;
-  const def = defendingPlayer.pokemon.stats[2].stat;
-  const rnd = Math.floor(Math.random() * 38) + 217;
-  const attack = Math.floor(
-    ((((2 / 5 + 2) * att * 60) / def / 50 + 2) * rnd) / 255
+  const attack = calculateAttack(
+    defendingPlayer.pokemon,
+    attackingPlayer.pokemon
   );
   defendingPlayer.pokemon.stats[0].stat = hp - attack;
-  defendingPlayer.pokemon.attack = null;
+  defendingPlayer.pokemon.attack = 0;
   attackingPlayer.pokemon.attack = attack;
 
   game.turn = game.opponent[playerId];

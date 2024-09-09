@@ -4,9 +4,17 @@ function VsPokemons({ ownPokemon, enemyPokemon }) {
   return (
     <>
       <div className="own-pokemon battlecards">
-        <div className="damage" id="enemyAttackNumber">
-          {enemyPokemon.attack}
-        </div>
+        {enemyPokemon ? (
+          <div
+            className="damage"
+            id="enemyAttackNumber"
+            style={{ visibility: enemyPokemon.attack ? "visible" : "hidden" }}
+          >
+            {enemyPokemon.attack}
+          </div>
+        ) : (
+          <></>
+        )}
         <div className="hp-bar-container">
           <progress
             className="hp-bar"
@@ -24,7 +32,11 @@ function VsPokemons({ ownPokemon, enemyPokemon }) {
       <div className="enemy-pokemon battlecards">
         {enemyPokemon ? (
           <>
-            <div className="damage" id="attackNumber">
+            <div
+              className="damage"
+              id="attackNumber"
+              style={{ visibility: ownPokemon.attack ? "visible" : "hidden" }}
+            >
               {ownPokemon.attack}
             </div>
             <div className="hp-bar-container">

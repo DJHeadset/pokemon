@@ -4,6 +4,7 @@ import battle from "../resources/pic/Battle.png";
 import Loading from "../components/Loading";
 import VsPokemons from "../components/VsPokemons";
 import decoder from "../utils/Decoder";
+import { showAttackNumber } from "../services/animations";
 
 function Pvp() {
   const location = useLocation();
@@ -28,17 +29,6 @@ function Pvp() {
       ws.current.send(JSON.stringify({ type: "ATTACK", gameId: gameId }));
     }
   };
-
-  function showAttackNumber() {
-    const damageElement = document.getElementById("attackNumber");
-    const enemyDamageElement = document.getElementById("enemyAttackNumber");
-    damageElement.classList.add("animated");
-    enemyDamageElement.classList.add("animated");
-    setTimeout(() => {
-      damageElement.classList.remove("animated");
-      enemyDamageElement.classList.remove("animated");
-    }, 1000);
-  }
 
   const setupGame = async () => {
     try {

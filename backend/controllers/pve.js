@@ -1,3 +1,8 @@
+const {
+  calculateAttack,
+  convertedGameState,
+} = require("../utils/pokemonfight");
+
 let ownPokemon, enemyPokemon, ownPokemonStats, enemyPokemonStats, user;
 
 function setOwnPokemonStats() {
@@ -21,28 +26,15 @@ function setEnemyPokemonStats() {
 }
 
 function handleAttack() {
-  const hp = enemyPokemonStats.hp;
-  const att = ownPokemonStats.att;
-  const def = enemyPokemonStats.def;
-  const rnd = Math.floor(Math.random() * 38) + 217;
-  const attack = Math.floor(
-    ((((2 / 5 + 2) * att * 60) / def / 50 + 2) * rnd) / 255
-  );
-  enemyPokemonStats.hp = hp - attack;
-  enemyPokemonStats.attack = attack;
+  const attack = calculateAttack(ownPokemon, enemyPokemon);
+  enemyPokemon.stats[0].stat = enemyPokemon.stats[0].stat - attack;
+  enemyPokemon.attack = attack;
 }
 
 function handleAttackBack() {
-  const hp = ownPokemonStats.hp;
-  const att = enemyPokemonStats.att;
-  const def = ownPokemonStats.def;
-  const rnd = Math.floor(Math.random() * 38) + 217;
-  const attack = Math.floor(
-    ((((2 / 5 + 2) * att * 60) / def / 50 + 2) * rnd) / 255
-  );
-
-  ownPokemonStats.hp = hp - attack;
-  ownPokemonStats.attack = attack;
+  const attack = calculateAttack(enemyPokemon, ownPokemon);
+  ownPokemon.stats[0].stat = ownPokemon.stats[0].stat - attack;
+  ownPokemon.attack = attack;
 }
 
 exports.battleSetup = (req, res, next) => {
@@ -59,16 +51,13 @@ exports.attack = (req, res, next) => {
   if (type === "attack") {
     handleAttack();
     handleAttackBack();
-    let response = {
-      enemy: {
-        hp: enemyPokemonStats.hp,
-        attack: enemyPokemonStats.attack,
-      },
-      own: {
-        hp: ownPokemonStats.hp,
-        attack: ownPokemonStats.attack,
+    const gameState = {
+      players: {
+        own: { pokemon: ownPokemon },
+        enemy: { pokemon: enemyPokemon },
       },
     };
+    const response = convertedGameState(gameState);
     res.send(response);
   } else {
     console.log("más");
