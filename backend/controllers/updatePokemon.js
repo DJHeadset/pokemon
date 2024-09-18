@@ -1,6 +1,7 @@
 const { calculateStats } = require("../utils/calculatestats");
 const User = require("../models/user");
 const jwt = require("jsonwebtoken");
+const { fetchPokemonData } = require("../utils/fetchpokemondata");
 const { jwtSecret } = process.env;
 
 function updateEv(own, enemy) {
@@ -33,8 +34,6 @@ async function savePokemon(userId, own) {
     if (!updatedPokemon) {
       throw new Error("Pokemon not found in user's data");
     }
-
-    //console.log("Updated Pokemon:", updatedPokemon);
     return updatedPokemon;
   } catch (error) {
     console.error("Error saving Pokémon:", error);
@@ -43,29 +42,42 @@ async function savePokemon(userId, own) {
 }
 
 exports.updateOwnPokemon = async (req, res, next) => {
-  const data = req.body;
+  const { ownPokemon, enemyPokemon } = req.body;
+  const userToken = req.headers.cookie?.substring(5);
 
-  let own = data.ownPokemon;
-  let enemy = data.enemyPokemon;
-  const user = req.headers.cookie.substring(5, req.headers.cookie.length);
+  try {
+    let basicEnemy = await fetchPokemonData(enemyPokemon.id);
+    basicEnemy.level = ownPokemon.level;
+    const enemy = await calculateStats(basicEnemy);
 
-  if (user) {
-    jwt.verify(user, jwtSecret, async (err, decodedToken) => {
-      if (err) {
-        return res.status(401).json({ message: err });
-      } else {
-        const temp = await User.findById(decodedToken.id).select("pokemons");
-        own.levels = temp.pokemons[own.uniqueId - 1].levels;
-        if (own.stats[0].stat > 0) {
-          XP = Math.floor((enemy.base_experience * enemy.level) / 7);
-          own.xp += XP;
-          updateEv(own, enemy);
-          own = calculateStats(own);
+    if (userToken) {
+      jwt.verify(userToken, jwtSecret, async (err, decodedToken) => {
+        if (err) {
+          return res.status(401).json({ message: "user not found ", err });
         }
-        savePokemon(decodedToken.id, own);
-        res.json(own);
-      }
-    });
+        try {
+          const user = await User.findById(decodedToken.id).select("pokemons");
+          if (!user) {
+            return res.status(404).json({ message: "User not found" });
+          }
+          let existingPokemon = user.pokemons[ownPokemon.uniqueId - 1];
+          if (ownPokemon.hp > 0) {
+            XP = Math.floor((enemy.base_experience * enemy.level) / 7);
+            existingPokemon.xp += XP;
+            existingPokemon.stats[0].stat = ownPokemon.hp;
+            updateEv(existingPokemon, enemy);
+            existingPokemon = calculateStats(existingPokemon);
+          }
+          savePokemon(decodedToken.id, existingPokemon);
+          res.json(existingPokemon);
+        } catch (error) {
+          console.error("Error processing Pokemon update", error);
+          res.status(500);
+        }
+      });
+    }
+  } catch (error) {
+    console.error(error);
   }
 };
 

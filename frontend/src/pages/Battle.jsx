@@ -11,8 +11,8 @@ function Battle() {
   const [enemyPokemon, setEnemyPokemon] = useState(location.state.enemyPokemon);
 
   async function updateOwnPokemon(data) {
-    const hp = data.own.hp - data.own.attack;
-    ownPokemon.stats[0].stat = hp < 0 ? 0 : hp;
+    const newHp = data.hp - data.attack;
+    data.hp = newHp < 0 ? 0 : newHp;
     const response = await fetch("/api/auth/updateownpokemon", {
       method: "POST",
       headers: {
@@ -29,7 +29,8 @@ function Battle() {
   }
 
   async function handleVictory(data) {
-    const newOwnPokemon = await updateOwnPokemon(data);
+    console.log("won");
+    const newOwnPokemon = await updateOwnPokemon(data.players.own.pokemon);
     navigate("/won", {
       state: {
         ownPokemon: newOwnPokemon,
@@ -38,8 +39,9 @@ function Battle() {
     });
   }
 
-  function handleDefeat(data) {
-    updateOwnPokemon(data);
+  async function handleDefeat(data) {
+    console.log("lost");
+    updateOwnPokemon(data.players.own.pokemon);
     navigate("/lost");
   }
 

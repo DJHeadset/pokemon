@@ -116,7 +116,7 @@ function handleAttack(gameId, playerId) {
     defendingPlayer.pokemon,
     attackingPlayer.pokemon
   );
-  defendingPlayer.pokemon.stats[0].stat = hp - attack;
+  defendingPlayer.pokemon.stats[0].stat = Math.max(0, hp - attack);
   defendingPlayer.pokemon.attack = 0;
   attackingPlayer.pokemon.attack = attack;
 

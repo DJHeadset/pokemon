@@ -36,6 +36,5 @@ exports.calculateStats = (pokemon) => {
     console.log("same level");
     pokemon.stats[0].stat = currentHp;
   }
-
   return pokemon;
 };

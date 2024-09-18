@@ -4,6 +4,9 @@ exports.convertedGameState = (game) => {
   Object.entries(game.players).forEach(([playerId, player]) => {
     convertedData.players[playerId] = {
       pokemon: {
+        uniqueId: player.pokemon.uniqueId,
+        level: player.pokemon.level,
+        id: player.pokemon.pokeId,
         hp: player.pokemon.stats[0].stat,
         maxHp: player.pokemon.stats[6].stat,
         attack: player.pokemon.attack ? player.pokemon.attack : 0,

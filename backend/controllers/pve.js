@@ -3,27 +3,7 @@ const {
   convertedGameState,
 } = require("../utils/pokemonfight");
 
-let ownPokemon, enemyPokemon, ownPokemonStats, enemyPokemonStats, user;
-
-function setOwnPokemonStats() {
-  ownPokemonStats = {
-    hp: ownPokemon.stats[0].stat,
-    att: ownPokemon.stats[1].stat,
-    def: ownPokemon.stats[2].stat,
-    maxHp: ownPokemon.stats[6].stat
-      ? ownPokemon.stats[6].stat
-      : ownPokemon.stats[6].base_stat,
-  };
-}
-
-function setEnemyPokemonStats() {
-  enemyPokemonStats = {
-    hp: enemyPokemon.stats[6].stat,
-    att: enemyPokemon.stats[1].stat,
-    def: enemyPokemon.stats[2].stat,
-    maxHp: enemyPokemon.stats[6].stat,
-  };
-}
+let ownPokemon, enemyPokemon, user;
 
 function handleAttack() {
   const attack = calculateAttack(ownPokemon, enemyPokemon);
@@ -41,8 +21,6 @@ exports.battleSetup = (req, res, next) => {
   user = req.headers.cookie.substring(5, req.headers.cookie.length);
   ownPokemon = req.body.own;
   enemyPokemon = req.body.enemy;
-  setOwnPokemonStats();
-  setEnemyPokemonStats();
   res.sendStatus(200);
 };
 
