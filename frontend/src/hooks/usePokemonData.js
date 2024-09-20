@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import decoder from "../service/Decoder";
+import decoder from "../utils/Decoder";
 import { useNavigate, useParams } from "react-router-dom";
 
 const usePokemonData = () => {

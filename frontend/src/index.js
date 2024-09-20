@@ -1,20 +1,22 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import "./App.css";
-import Battle from "./Components/Battle";
-import Lost from "./Components/Lost";
-import Win from "./Components/Win";
-import Header from "./Components/Layout/Header";
-import Welcome from "./Components/Welcome";
-import Admin from "./Components/Admin";
-import User from "./Components/User";
-import PokemonData from "./Components/Pokemondata";
-import StarterPack from "./Components/StarterPack";
-import Map from "./Components/Map";
-import City from "./Components/City";
-import Hospital from "./Components/Hospital";
-import Details from "./Components/Details";
+import "./styles/App.css";
+import Battle from "./pages/Battle";
+import Lost from "./pages/Lost";
+import Win from "./pages/Win";
+import Header from "./components/Header";
+import Welcome from "./pages/Welcome";
+import Admin from "./pages/Admin";
+import User from "./pages/User";
+//import PokemonData from "./pages/Pokemondata";
+import StarterPack from "./pages/StarterPack";
+import Map from "./pages/Map";
+import City from "./pages/City";
+import Hospital from "./pages/Hospital";
+import Details from "./pages/Details";
+import Lobby from "./pages/Lobby";
+import Pvp from "./pages/Pvp";
 
 const router = createBrowserRouter([
   {
@@ -45,10 +47,12 @@ const router = createBrowserRouter([
         path: "/won",
         element: <Win />,
       },
+      /*
       {
         path: "/data",
         element: <PokemonData />,
       },
+      */
       {
         path: "/starterpack",
         element: <StarterPack />,
@@ -68,6 +72,14 @@ const router = createBrowserRouter([
       {
         path: "/details/:id",
         element: <Details />,
+      },
+      {
+        path: "/lobby",
+        element: <Lobby />,
+      },
+      {
+        path: "/pvp",
+        element: <Pvp />,
       },
     ],
   },

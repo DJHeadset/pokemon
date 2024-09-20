@@ -1,21 +1,11 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import decoder from "../service/Decoder";
+import { fetchUserData } from "../services/userService";
 
 const useUserData = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-
-  const fetchUserData = useCallback(async () => {
-    const cookie = decoder();
-    if (cookie === undefined) {
-      return null;
-    } else {
-      const response = await fetch("/api/auth/getuser");
-      return response.json();
-    }
-  }, []);
 
   const getUserData = useCallback(async () => {
     const userData = await fetchUserData();
@@ -26,7 +16,7 @@ const useUserData = () => {
       setUser(userData);
       setLoading(false);
     }
-  }, [fetchUserData, navigate]);
+  }, [navigate]);
 
   useEffect(() => {
     getUserData();

@@ -1,4 +1,5 @@
-- Pokemon details
+- PVP
+- Player level = avreage pokemon level
 - Post Office
     users can send messages to each other
 Evolution
@@ -8,3 +9,7 @@ Evolution
 - Implement moves
 - Switch Pokemons mid-battle(?)
 - .env generated from Github Secret
+- mobile phone port
+- hungarian language
+- areas display min-max level //(pokemon_encounters.[i].version_details[j].encounter_details[k].min/max_level)
+- Player "unlocks" areas based on their level
