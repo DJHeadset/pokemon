@@ -11,5 +11,5 @@ Evolution
 - .env generated from Github Secret
 - mobile phone port
 - hungarian language
-- areas display min-max level (pokemon_encounters.[i].version_details[j].encounter_details[k].min/max_level)
-- Player "unlocks" arear basen on their level
+- areas display min-max level //(pokemon_encounters.[i].version_details[j].encounter_details[k].min/max_level)
+- Player "unlocks" areas based on their level
