@@ -67,6 +67,8 @@ exports.updateOwnPokemon = async (req, res, next) => {
             existingPokemon.stats[0].stat = ownPokemon.hp;
             updateEv(existingPokemon, enemy);
             existingPokemon = calculateStats(existingPokemon);
+          } else {
+            existingPokemon.stats[0].stat = 0;
           }
           savePokemon(decodedToken.id, existingPokemon);
           res.json(existingPokemon);

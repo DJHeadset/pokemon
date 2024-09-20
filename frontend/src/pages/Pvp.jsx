@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import battle from "../resources/pic/Battle.png";
 import Loading from "../components/Loading";
 import VsPokemons from "../components/VsPokemons";
 import decoder from "../utils/Decoder";
 import { showAttackNumber } from "../services/animations";
+import { useGameOutCome } from "../hooks/useGameOutcome";
 
 function Pvp() {
   const location = useLocation();
@@ -16,6 +17,7 @@ function Pvp() {
   const [currentTurn, setCurrentTurn] = useState(null);
   const playerIdRef = useRef(null);
   const ws = useRef(null);
+  const {handleVictory, handleDefeat} = useGameOutCome()
 
   useEffect(() => {
     const cookie = decoder();
@@ -96,7 +98,15 @@ function Pvp() {
         const opponentId = gameState.opponent[playerId];
         setOwnPokemon(gameState.players[playerId].pokemon);
         setEnemyPokemon(gameState.players[opponentId].pokemon);
-        showAttackNumber();
+
+        if (gameState.players[playerId].pokemon.hp <= 0) {
+          handleDefeat(gameState.players[playerId].pokemon, gameState.players[opponentId].pokemon,ws.current);
+        } else if (gameState.players[opponentId].pokemon.hp <= 0) {
+          handleVictory(gameState.players[playerId].pokemon, gameState.players[opponentId].pokemon,ws.current);
+        } else {
+          showAttackNumber();
+        }
+    
         console.log("Game state received:", gameState);
       }
     };

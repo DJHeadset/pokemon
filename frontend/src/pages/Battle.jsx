@@ -1,49 +1,15 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import battle from "../resources/pic/Battle.png";
 import VsPokemons from "../components/VsPokemons";
 import { showAttackNumber } from "../services/animations";
+import { useGameOutCome } from "../hooks/useGameOutcome";
 
 function Battle() {
   const location = useLocation();
-  const navigate = useNavigate();
+  const { handleVictory, handleDefeat } = useGameOutCome();
   const [ownPokemon, setOwnPokemon] = useState(location.state.ownPokemon);
   const [enemyPokemon, setEnemyPokemon] = useState(location.state.enemyPokemon);
-
-  async function updateOwnPokemon(data) {
-    const newHp = data.hp - data.attack;
-    data.hp = newHp < 0 ? 0 : newHp;
-    const response = await fetch("/api/auth/updateownpokemon", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "same-origin",
-      body: JSON.stringify({
-        ownPokemon,
-        enemyPokemon,
-      }),
-    });
-    const newOwnPokemon = await response.json();
-    return newOwnPokemon;
-  }
-
-  async function handleVictory(data) {
-    console.log("won");
-    const newOwnPokemon = await updateOwnPokemon(data.players.own.pokemon);
-    navigate("/won", {
-      state: {
-        ownPokemon: newOwnPokemon,
-        enemyPokemon: enemyPokemon,
-      },
-    });
-  }
-
-  async function handleDefeat(data) {
-    console.log("lost");
-    updateOwnPokemon(data.players.own.pokemon);
-    navigate("/lost");
-  }
 
   async function handleAttack() {
     const response = await fetch(`/pokemon/battle/attack`);
@@ -55,9 +21,9 @@ function Battle() {
 
     showAttackNumber();
     if (data.players.own.pokemon.hp <= 0) {
-      handleDefeat(data);
+      handleDefeat(data.players.own.pokemon, data.players.enemy.pokemon);
     } else if (data.players.enemy.pokemon.hp <= 0) {
-      handleVictory(data);
+      handleVictory(data.players.own.pokemon, data.players.enemy.pokemon);
     }
   }
 

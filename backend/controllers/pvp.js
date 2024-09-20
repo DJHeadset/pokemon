@@ -10,6 +10,77 @@ let players = {};
 let waitingPlayer = null;
 let currentPlayer = null;
 
+function handlePlayerDisconnection(playerId) {
+  let gameId = null;
+
+  if (waitingPlayer && waitingPlayer.id === playerId) {
+    console.log("Waiting player disconnected", waitingPlayer.id);
+    waitingPlayer = null;
+  }
+
+  for (const id in games) {
+    if (games[id].players[playerId]) {
+      gameId = id;
+      break;
+    }
+  }
+
+  if (gameId) {
+    const game = games[gameId];
+    const opponentId = game.opponent[playerId];
+
+    if (players[opponentId]) {
+      players[opponentId].send(
+        JSON.stringify({
+          type: "OPPONENT_DISCONNECTED",
+          message: "Your opponent has disconnected",
+        })
+      );
+    }
+
+    delete games[gameId];
+    console.log(`Game ${gameId} ended due to disconnection`);
+  }
+  delete players[playerId];
+}
+
+function generateGameId() {
+  return Math.random().toString(36).substr(2, 9);
+}
+
+function handleAttack(gameId, playerId) {
+  const game = games[gameId];
+  const attackingPlayer = game.players[playerId];
+  const defendingPlayer = game.players[game.opponent[playerId]];
+  const hp = defendingPlayer.pokemon.stats[0].stat;
+  const attack = calculateAttack(
+    defendingPlayer.pokemon,
+    attackingPlayer.pokemon
+  );
+  defendingPlayer.pokemon.stats[0].stat = Math.max(0, hp - attack);
+  defendingPlayer.pokemon.attack = 0;
+  attackingPlayer.pokemon.attack = attack;
+
+  game.turn = game.opponent[playerId];
+  sendGameState(gameId);
+}
+
+function sendGameState(gameId) {
+  const game = games[gameId];
+  const convertedData = convertedGameState(game);
+
+  const updatedGameState = {
+    ...game,
+    players: convertedData.players,
+  };
+  Object.keys(game.players).forEach((playerId) => {
+    const ws = players[playerId];
+    if (ws.readyState === WebSocket.OPEN) {
+      ws.send(JSON.stringify({ type: "GAME_STATE", state: updatedGameState }));
+    }
+  });
+}
+
 exports.initializeWebSocket = (server) => {
   const wss = new WebSocket.Server({ server });
 
@@ -34,7 +105,7 @@ exports.initializeWebSocket = (server) => {
 
     ws.on("close", () => {
       console.log(`Player disconnected: ${playerId}`);
-      delete players[playerId];
+      handlePlayerDisconnection(playerId);
     });
 
     ws.onerror = (error) => {
@@ -102,40 +173,3 @@ exports.joingame = async (req, res, next) => {
     }
   }
 };
-
-function generateGameId() {
-  return Math.random().toString(36).substr(2, 9);
-}
-
-function handleAttack(gameId, playerId) {
-  const game = games[gameId];
-  const attackingPlayer = game.players[playerId];
-  const defendingPlayer = game.players[game.opponent[playerId]];
-  const hp = defendingPlayer.pokemon.stats[0].stat;
-  const attack = calculateAttack(
-    defendingPlayer.pokemon,
-    attackingPlayer.pokemon
-  );
-  defendingPlayer.pokemon.stats[0].stat = Math.max(0, hp - attack);
-  defendingPlayer.pokemon.attack = 0;
-  attackingPlayer.pokemon.attack = attack;
-
-  game.turn = game.opponent[playerId];
-  sendGameState(gameId);
-}
-
-function sendGameState(gameId) {
-  const game = games[gameId];
-  const convertedData = convertedGameState(game);
-
-  const updatedGameState = {
-    ...game,
-    players: convertedData.players,
-  };
-  Object.keys(game.players).forEach((playerId) => {
-    const ws = players[playerId];
-    if (ws.readyState === WebSocket.OPEN) {
-      ws.send(JSON.stringify({ type: "GAME_STATE", state: updatedGameState }));
-    }
-  });
-}
